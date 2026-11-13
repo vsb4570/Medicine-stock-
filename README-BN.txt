@@ -1,4 +1,4 @@
-Medicine Shop Android APK Project
+Mohammad Pharmacy Android APK Project
 =================================
 
 এই ZIP-এ আপনার আপলোড করা দুইটি HTML সফটওয়্যারকে এক Android অ্যাপে যুক্ত করা হয়েছে:
@@ -27,5 +27,10 @@ GitHub দিয়ে মোবাইল থেকেই APK build (কম্প�
 1. ZIP extract করে MedicineShopAPK ফোল্ডারের ভেতরের সব ফাইল নতুন GitHub repository-তে upload করুন (ফোল্ডারটিকে nested অবস্থায় নয়; app/, .github/, build.gradle, settings.gradle ইত্যাদি repository root-এ থাকতে হবে)।
 2. Repository-তে Actions tab খুলুন। প্রথমবার workflow অনুমোদন চাইলে Allow দিন।
 3. Build Medicine Shop APK workflow চালু করুন; স্বয়ংক্রিয়ভাবে push-এও build হবে।
-4. Workflow সফল হলে Actions > সফল run > Artifacts > Medicine-Shop-debug-APK ডাউনলোড করুন। ZIP খুলে app-debug.apk পাবেন।
+4. Workflow সফল হলে Actions > সফল run > Artifacts > Mohammad-Pharmacy-debug-APK ডাউনলোড করুন। ZIP খুলে app-debug.apk পাবেন।
 5. APK ফোনে install করুন।
+
+দোকানের পরিচিতি:
+নাম: Mohammad Pharmacy
+ঠিকানা: 491/1 East Kazipara, Kafrul, Mirpur, Dhaka
+ফোন: 01325682483
