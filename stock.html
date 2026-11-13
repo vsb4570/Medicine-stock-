@@ -1,102 +1,695 @@
-<!doctype html>
+
+<!DOCTYPE html>
 <html lang="bn">
 <head>
-<meta charset="utf-8">
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#087f5b">
-<title>Medicine Stock - ঔষধ দোকানের হিসাব</title>
+<title>Mohammad Pharmacy</title>
 <style>
-:root{--green:#087f5b;--bg:#f4f7f6;--ink:#172b25;--muted:#66756f;--line:#dce6e1;--red:#c92a2a}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Noto Sans Bengali",sans-serif}
-header{background:var(--green);color:white;padding:18px 16px}header h1{margin:0;font-size:22px}header p{margin:5px 0 0;font-size:13px;opacity:.9}
-main{max-width:1100px;margin:auto;padding:14px}.tabs{display:flex;gap:7px;overflow:auto;margin-bottom:14px}.tabs button{white-space:nowrap;border:1px solid var(--line);background:white;color:var(--ink);padding:10px 13px;border-radius:10px;font-weight:600}.tabs button.active{background:var(--green);color:white;border-color:var(--green)}
-.panel,.stat{background:white;border:1px solid var(--line);border-radius:13px;padding:14px;margin-bottom:13px}.panel h2{font-size:18px;margin:0 0 12px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}.field label{display:block;font-size:13px;color:var(--muted);margin-bottom:4px}.field input,.field select{width:100%;padding:10px;border:1px solid #cbd8d1;border-radius:8px;font:inherit;background:white}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}button,.btn{cursor:pointer;border:0;border-radius:9px;padding:10px 14px;background:var(--green);color:white;font-weight:650;font:inherit}.secondary{background:#e8f1ed;color:#145c45}.danger{background:#fff0f0;color:var(--red)}.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:10px}.stat small{color:var(--muted)}.stat strong{display:block;font-size:21px;margin-top:4px}.table-wrap{overflow:auto}table{width:100%;border-collapse:collapse;min-width:700px}th,td{padding:9px 8px;border-bottom:1px solid var(--line);text-align:left;font-size:13px}th{background:#f0f6f3}.hidden{display:none!important}.hint{font-size:12px;color:var(--muted);margin-top:7px}.pill{padding:3px 7px;border-radius:20px;background:#e8f1ed;font-size:11px}.low{color:var(--red);font-weight:700}.right{text-align:right}.receipt{max-width:420px;margin:auto}
-@media print{header,.tabs,.no-print,button{display:none!important}body{background:white}main{padding:0}.panel{border:0}.print-only{display:block!important}}
+*{box-sizing:border-box}
+body{margin:0;background:#f2f6f4;color:#18352b;font-family:Arial,"Noto Sans Bengali",sans-serif}
+header{background:#087f5b;color:white;padding:18px}
+header h2{margin:0}
+header p{margin:6px 0 0;font-size:13px}
+main{padding:12px;max-width:1100px;margin:auto}
+nav{display:flex;gap:6px;overflow:auto;margin-bottom:12px}
+button{border:0;padding:10px 13px;border-radius:8px;background:#087f5b;color:white;cursor:pointer;font-size:14px}
+nav button{white-space:nowrap;background:white;color:#087f5b;border:1px solid #ddd}
+nav button.active{background:#087f5b;color:white}
+.panel,.stat{background:white;padding:14px;border-radius:12px;margin-bottom:12px;border:1px solid #e1e9e4}
+h3{margin-top:0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:10px}
+label{display:block;font-size:13px;margin-bottom:5px;color:#53645c}
+input,select{width:100%;padding:11px;border:1px solid #ccd9d1;border-radius:7px;font-size:15px}
+.field{min-width:0}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.secondary{background:#e5f2ec;color:#087f5b}
+.danger{background:#ffeaea;color:#c22}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}
+.stat small{color:#66756e}
+.stat strong{display:block;font-size:21px;margin-top:5px}
+.table-wrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:850px}
+th,td{padding:10px;border-bottom:1px solid #e2e9e5;text-align:left;font-size:13px;white-space:nowrap}
+th{background:#edf5f0}
+.hidden{display:none!important}
+.hint{font-size:12px;color:#718078}
+@media print{nav,button,header{display:none!important}}
 </style>
 </head>
 <body>
-<header><h1>💊 Medicine Stock</h1><p>ঔষধ দোকানের স্টক, ক্রয়-বিক্রয় ও হিসাব</p></header>
+
+<header>
+<h2>💊 Mohammad Pharmacy</h2>
+<p>491/1 East Kazipara, Kafrul, Mirpur, Dhaka</p>
+<p>ফোন: 01325682483</p>
+</header>
+
 <main>
+
 <div class="stats">
- <div class="stat"><small>মোট ঔষধ</small><strong id="statMeds">0</strong></div>
- <div class="stat"><small>মোট স্টক (পিস)</small><strong id="statStock">0</strong></div>
- <div class="stat"><small>আজকের বিক্রয়</small><strong id="statSales">৳0</strong></div>
- <div class="stat"><small>মোট বকেয়া</small><strong id="statDue">৳0</strong></div>
+<div class="stat"><small>মোট ঔষধ</small><strong id="totalMed">০</strong></div>
+<div class="stat"><small>মোট স্টক (পিস)</small><strong id="totalStock">০</strong></div>
+<div class="stat"><small>আজকের বিক্রয়</small><strong id="todaySale">৳০</strong></div>
+<div class="stat"><small>মোট বকেয়া</small><strong id="totalDue">৳০</strong></div>
 </div>
-<nav class="tabs no-print">
-<button class="active" data-tab="products">ঔষধ/স্টক</button><button data-tab="sale">বিক্রয়</button><button data-tab="history">বিক্রয় তালিকা</button><button data-tab="reports">রিপোর্ট</button><button data-tab="backup">ব্যাকআপ</button>
+
+<nav>
+<button class="active" onclick="tab('products',this)">ঔষধ/স্টক</button>
+<button onclick="tab('purchase',this)">ঔষধ ক্রয়</button>
+<button onclick="tab('sale',this)">ঔষধ বিক্রয়</button>
+<button onclick="tab('history',this)">ক্রয়-বিক্রয় তালিকা</button>
+<button onclick="tab('account',this)">দোকান হিসাব</button>
+<button onclick="tab('backup',this)">ব্যাকআপ</button>
 </nav>
-<section id="products" class="tab">
+
+<!-- ঔষধ ও স্টক -->
+<section id="products">
+
 <div class="panel">
-<h2 id="productTitle">নতুন ঔষধ যোগ করুন</h2>
+<h3 id="formTitle">নতুন ঔষধ যোগ করুন</h3>
 <input type="hidden" id="editId">
+
 <div class="grid">
-<div class="field"><label>ঔষধের নাম *</label><input id="pName" placeholder="যেমন: Seclo 20"></div>
-<div class="field"><label>বারকোড</label><input id="pBarcode" placeholder="বারকোড"></div>
-<div class="field"><label>কোম্পানি</label><input id="pCompany" placeholder="কোম্পানির নাম"></div>
-<div class="field"><label>মেয়াদ উত্তীর্ণের তারিখ</label><input id="pExpiry" type="date"></div>
-<div class="field"><label>১ বক্সে পাতা</label><input id="pBoxStrip" type="number" min="1" value="10"></div>
-<div class="field"><label>১ পাতায় পিস</label><input id="pStripPiece" type="number" min="1" value="10"></div>
-<div class="field"><label>বক্স সংখ্যা</label><input id="pBox" type="number" min="0" value="0"></div>
-<div class="field"><label>পাতা সংখ্যা</label><input id="pStrip" type="number" min="0" value="0"></div>
-<div class="field"><label>খোলা পিস</label><input id="pPiece" type="number" min="0" value="0"></div>
-<div class="field"><label>বিক্রয় মূল্য (৳/বক্স)</label><input id="pSell" type="number" min="0" step=".01"></div>
-<div class="field"><label>ক্রয় মূল্য (৳/বক্স)</label><input id="pBuy" type="number" min="0" step=".01"></div>
-<div class="field"><label>কোম্পানি ডিসকাউন্ট (%)</label><input id="pDiscount" type="number" min="0" max="100" step=".01"></div>
+
+<div class="field">
+<label>ঔষধের নাম *</label>
+<input id="name" placeholder="ঔষধের নাম">
 </div>
-<p class="hint">বিক্রয় মূল্য ও ডিসকাউন্ট দিলে ক্রয়মূল্য বের হবে। অথবা বিক্রয় মূল্য ও ক্রয়মূল্য দিলে ডিসকাউন্ট বের হবে। ডিসকাউন্ট = (বিক্রয় মূল্য − ক্রয়মূল্য) ÷ বিক্রয় মূল্য × ১০০।</p>
-<div class="actions"><button onclick="saveProduct()">সংরক্ষণ করুন</button><button class="secondary" onclick="clearProduct()">নতুন/পরিষ্কার</button></div>
+
+<div class="field">
+<label>ব্যাচ নং</label>
+<input id="batch" placeholder="Batch Number">
 </div>
-<div class="panel"><h2>ঔষধের তালিকা</h2><div class="field"><label>নাম/বারকোড দিয়ে খুঁজুন</label><input id="searchProduct" oninput="renderProducts()" placeholder="Search..."></div><div class="table-wrap"><table><thead><tr><th>ঔষধ</th><th>বারকোড</th><th>স্টক (বক্স/পাতা/পিস)</th><th>বিক্রয়</th><th>ক্রয়</th><th>ডিসকাউন্ট</th><th>মেয়াদ</th><th>কাজ</th></tr></thead><tbody id="productRows"></tbody></table></div></div>
+
+<div class="field">
+<label>মেয়াদ (মাস ও সাল)</label>
+<input id="expiry" type="month">
+</div>
+
+<div class="field">
+<label>১ বক্সে পাতা</label>
+<input id="boxStrip" type="number" value="10" min="1">
+</div>
+
+<div class="field">
+<label>১ পাতায় পিস</label>
+<input id="stripPiece" type="number" value="10" min="1">
+</div>
+
+<div class="field">
+<label>বক্স</label>
+<input id="box" type="number" value="0" min="0">
+</div>
+
+<div class="field">
+<label>পাতা</label>
+<input id="strip" type="number" value="0" min="0">
+</div>
+
+<div class="field">
+<label>পিস</label>
+<input id="piece" type="number" value="0" min="0">
+</div>
+
+<div class="field">
+<label>বিক্রয় মূল্য (বক্স)</label>
+<input id="sell" type="number" min="0">
+</div>
+
+<div class="field">
+<label>ছাড় (%)</label>
+<input id="discount" type="number" min="0" max="100" value="0">
+</div>
+
+<div class="field">
+<label>ক্রয় মূল্য (বক্স)</label>
+<input id="buy" type="number" min="0">
+</div>
+
+</div>
+
+<p class="hint">বক্স, পাতা ও পিস আলাদাভাবে লিখুন। মূল্য বক্স হিসাবে লিখুন।</p>
+
+<div class="actions">
+<button onclick="saveProduct()">সংরক্ষণ</button>
+<button class="secondary" onclick="clearForm()">পরিষ্কার</button>
+</div>
+</div>
+
+<div class="panel">
+<h3>ঔষধের তালিকা</h3>
+<input id="search" placeholder="ঔষধের নাম / ব্যাচ খুঁজুন" oninput="renderProducts()">
+
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+<th>নাম</th>
+<th>ব্যাচ নং</th>
+<th>বক্স</th>
+<th>পাতা</th>
+<th>পিস</th>
+<th>বিক্রয়</th>
+<th>ছাড়</th>
+<th>ক্রয়</th>
+<th>মেয়াদ</th>
+<th>কাজ</th>
+</tr>
+</thead>
+<tbody id="productList"></tbody>
+</table>
+</div>
+</div>
 </section>
-<section id="sale" class="tab hidden">
-<div class="panel"><h2>নতুন বিক্রয়</h2><div class="grid">
-<div class="field"><label>ঔষধ নির্বাচন</label><select id="saleProduct"></select></div>
-<div class="field"><label>পরিমাণ (পিস)</label><input id="saleQty" type="number" min="1" value="1"></div>
-<div class="field"><label>বিক্রয় মূল্য (৳/বক্স)</label><input id="salePrice" type="number" min="0" step=".01"></div>
-<div class="field"><label>ক্রেতার নাম</label><input id="customer" placeholder="ঐচ্ছিক"></div>
-<div class="field"><label>জমা (৳)</label><input id="paid" type="number" min="0" value="0"></div>
-</div><div class="hint" id="saleInfo"></div><div class="actions"><button onclick="makeSale()">বিক্রয় সম্পন্ন</button></div></div>
-<div class="panel"><h2>বিক্রয়ের রসিদ</h2><div id="receipt" class="receipt">এখনো কোনো বিক্রয় করা হয়নি।</div><div class="actions no-print"><button class="secondary" onclick="window.print()">রসিদ প্রিন্ট</button></div></div>
+
+<!-- ক্রয় -->
+<section id="purchase" class="hidden">
+
+<div class="panel">
+<h3>নতুন ঔষধ ক্রয়</h3>
+
+<div class="grid">
+<div class="field">
+<label>ঔষধ নির্বাচন</label>
+<select id="purchaseProduct"></select>
+</div>
+
+<div class="field">
+<label>ক্রয় বক্স</label>
+<input id="buyBox" type="number" min="0" value="0">
+</div>
+
+<div class="field">
+<label>ক্রয় পাতা</label>
+<input id="buyStrip" type="number" min="0" value="0">
+</div>
+
+<div class="field">
+<label>ক্রয় পিস</label>
+<input id="buyPiece" type="number" min="0" value="0">
+</div>
+
+<div class="field">
+<label>ক্রয় মূল্য (বক্স)</label>
+<input id="buyPrice" type="number" min="0">
+</div>
+
+<div class="field">
+<label>মোট টাকা জমা</label>
+<input id="buyPaid" type="number" min="0" value="0">
+</div>
+</div>
+
+<div id="purchaseInfo" class="hint"></div>
+
+<div class="actions">
+<button onclick="makePurchase()">ক্রয় সংরক্ষণ</button>
+</div>
+</div>
+
 </section>
-<section id="history" class="tab hidden"><div class="panel"><h2>বিক্রয় তালিকা</h2><div class="table-wrap"><table><thead><tr><th>তারিখ</th><th>ক্রেতা</th><th>ঔষধ</th><th>পরিমাণ</th><th>মোট</th><th>জমা</th><th>বাকি</th><th>কাজ</th></tr></thead><tbody id="saleRows"></tbody></table></div></div></section>
-<section id="reports" class="tab hidden"><div class="panel"><h2>হিসাব রিপোর্ট</h2><div class="stats"><div class="stat"><small>মোট বিক্রয়</small><strong id="rSales">৳0</strong></div><div class="stat"><small>আনুমানিক লাভ</small><strong id="rProfit">৳0</strong></div><div class="stat"><small>মোট বকেয়া</small><strong id="rDue">৳0</strong></div></div><h2>স্টক সতর্কতা</h2><div id="alerts"></div></div></section>
-<section id="backup" class="tab hidden"><div class="panel"><h2>ডাটা ব্যাকআপ</h2><p>এই ব্রাউজারের Local Storage-এ ডাটা সংরক্ষিত হয়। নিয়মিত ব্যাকআপ ডাউনলোড করুন।</p><div class="actions"><button onclick="backup()">ব্যাকআপ ডাউনলোড</button><label class="btn secondary">ব্যাকআপ ফিরিয়ে আনুন<input type="file" accept="application/json" hidden onchange="restore(event)"></label><button class="danger" onclick="if(confirm('সব ডাটা মুছে ফেলবেন?')){localStorage.removeItem(KEY);location.reload()}">সব ডাটা মুছুন</button></div></div></section>
+
+<!-- বিক্রয় -->
+<section id="sale" class="hidden">
+
+<div class="panel">
+<h3>নতুন ঔষধ বিক্রয়</h3>
+
+<div class="grid">
+<div class="field">
+<label>ঔষধ নির্বাচন</label>
+<select id="saleProduct"></select>
+</div>
+
+<div class="field">
+<label>পরিমাণ (পিস)</label>
+<input id="saleQty" type="number" min="1" value="1">
+</div>
+
+<div class="field">
+<label>বিক্রয় মূল্য (পিস)</label>
+<input id="salePrice" type="number" min="0">
+</div>
+
+<div class="field">
+<label>ক্রেতার নাম</label>
+<input id="customer" placeholder="ক্রেতার নাম">
+</div>
+
+<div class="field">
+<label>জমা টাকা</label>
+<input id="salePaid" type="number" min="0" value="0">
+</div>
+</div>
+
+<div id="saleInfo" class="hint"></div>
+
+<div class="actions">
+<button onclick="makeSale()">বিক্রয় সম্পন্ন</button>
+</div>
+</div>
+
+<div class="panel">
+<h3>বিক্রয় রসিদ</h3>
+<div id="receipt">এখনো কোনো বিক্রয় হয়নি।</div>
+<button onclick="window.print()">রসিদ প্রিন্ট</button>
+</div>
+
+</section>
+
+<!-- ক্রয় বিক্রয় ইতিহাস -->
+<section id="history" class="hidden">
+
+<div class="panel">
+<h3>ক্রয়-বিক্রয় তালিকা</h3>
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+<th>তারিখ</th>
+<th>ধরন</th>
+<th>ঔষধ</th>
+<th>পরিমাণ</th>
+<th>মোট টাকা</th>
+<th>জমা</th>
+<th>বাকি</th>
+</tr>
+</thead>
+<tbody id="historyList"></tbody>
+</table>
+</div>
+</div>
+
+</section>
+
+<!-- দোকান হিসাব -->
+<section id="account" class="hidden">
+
+<div class="panel">
+<h3>দোকানের হিসাব</h3>
+
+<div class="stats">
+<div class="stat">
+<small>মোট ক্রয়</small>
+<strong id="totalPurchase">৳০</strong>
+</div>
+
+<div class="stat">
+<small>মোট বিক্রয়</small>
+<strong id="totalSales">৳০</strong>
+</div>
+
+<div class="stat">
+<small>আনুমানিক লাভ</small>
+<strong id="totalProfit">৳০</strong>
+</div>
+
+<div class="stat">
+<small>মোট বাকি</small>
+<strong id="accountDue">৳০</strong>
+</div>
+</div>
+
+<h3>স্টক সতর্কতা</h3>
+<div id="alerts"></div>
+
+</div>
+</section>
+
+<!-- ব্যাকআপ -->
+<section id="backup" class="hidden">
+<div class="panel">
+<h3>ডাটা ব্যাকআপ</h3>
+<p>নিয়মিত ডাটা ব্যাকআপ রাখুন।</p>
+<div class="actions">
+<button onclick="backup()">ব্যাকআপ ডাউনলোড</button>
+<label class="secondary">
+ব্যাকআপ ফিরিয়ে আনুন
+<input type="file" accept="application/json" onchange="restore(event)">
+</label>
+</div>
+</div>
+</section>
+
 </main>
+
 <script>
-const KEY='medicineStockDataV1';let db=JSON.parse(localStorage.getItem(KEY)||'{"products":[],"sales":[]}');
-const money=n=>'৳'+(Number(n)||0).toLocaleString('en-BD',{maximumFractionDigits:2});
-const num=id=>Number(document.getElementById(id).value)||0;
-const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-function save(){localStorage.setItem(KEY,JSON.stringify(db));renderAll()}
-document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-tab]').forEach(x=>x.classList.toggle('active',x===b));document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('hidden',x.id!==b.dataset.tab));});
-function stockPieces(p){return p.box*p.boxStrip*p.stripPiece+p.strip*p.stripPiece+p.piece}
-function saveProduct(){
- let id=document.getElementById('editId').value,name=document.getElementById('pName').value.trim(),sell=num('pSell'),buy=num('pBuy'),disc=num('pDiscount');
- if(!name||sell<=0){alert('ঔষধের নাম ও বিক্রয় মূল্য দিন।');return}
- if(buy>0&&disc===0)disc=(sell-buy)/sell*100;else if(disc>0)buy=sell*(1-disc/100);
- if(buy<0||disc<0||disc>100){alert('ক্রয়মূল্য/ডিসকাউন্ট সঠিক নয়।');return}
- const p={id:id||String(Date.now()),name,barcode:document.getElementById('pBarcode').value.trim(),company:document.getElementById('pCompany').value.trim(),expiry:document.getElementById('pExpiry').value,boxStrip:Math.max(1,num('pBoxStrip')),stripPiece:Math.max(1,num('pStripPiece')),box:num('pBox'),strip:num('pStrip'),piece:num('pPiece'),sell,buy,discount:disc};
- if(id){let i=db.products.findIndex(x=>x.id===id);db.products[i]=p}else db.products.push(p);
- clearProduct();save();alert('ঔষধ সংরক্ষণ হয়েছে।')
+const KEY="mohammadPharmacyDataV2";
+
+let db=JSON.parse(
+localStorage.getItem(KEY) ||
+localStorage.getItem("medicineStockDataV1") ||
+'{"products":[],"sales":[],"purchases":[]}'
+);
+
+db.sales=db.sales||[];
+db.purchases=db.purchases||[];
+
+const $=id=>document.getElementById(id);
+const num=id=>Number($(id).value)||0;
+const money=n=>"৳"+Number(n||0).toLocaleString("en-BD",{maximumFractionDigits:2});
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const bn=n=>Number(n||0).toLocaleString("bn-BD");
+
+function save(){
+localStorage.setItem(KEY,JSON.stringify(db));
+renderAll();
 }
-function clearProduct(){['editId','pName','pBarcode','pCompany','pExpiry'].forEach(x=>document.getElementById(x).value='');['pBox','pStrip','pPiece'].forEach(x=>document.getElementById(x).value=0);document.getElementById('pBoxStrip').value=10;document.getElementById('pStripPiece').value=10;['pSell','pBuy','pDiscount'].forEach(x=>document.getElementById(x).value='');document.getElementById('productTitle').textContent='নতুন ঔষধ যোগ করুন'}
-function editProduct(id){let p=db.products.find(x=>x.id===id);if(!p)return;document.getElementById('editId').value=p.id;for(let [k,v] of Object.entries({pName:p.name,pBarcode:p.barcode,pCompany:p.company,pExpiry:p.expiry,pBoxStrip:p.boxStrip,pStripPiece:p.stripPiece,pBox:p.box,pStrip:p.strip,pPiece:p.piece,pSell:p.sell,pBuy:p.buy,pDiscount:p.discount}))document.getElementById(k).value=v;document.getElementById('productTitle').textContent='ঔষধের তথ্য সম্পাদনা'}
-function deleteProduct(id){if(confirm('ঔষধটি মুছবেন?')){db.products=db.products.filter(p=>p.id!==id);save()}}
-function renderProducts(){let q=(document.getElementById('searchProduct')?.value||'').toLowerCase();document.getElementById('productRows').innerHTML=db.products.filter(p=>(p.name+' '+p.barcode).toLowerCase().includes(q)).map(p=>`<tr><td><b>${esc(p.name)}</b><br><small>${esc(p.company)}</small></td><td>${esc(p.barcode)}</td><td>${p.box}/${p.strip}/${p.piece}<br><small>${stockPieces(p)} পিস</small></td><td>${money(p.sell)}</td><td>${money(p.buy)}</td><td>${p.discount.toFixed(2)}%</td><td>${esc(p.expiry||'—')}</td><td><button class="secondary" onclick="editProduct('${p.id}')">Edit</button> <button class="danger" onclick="deleteProduct('${p.id}')">মুছুন</button></td></tr>`).join('')||'<tr><td colspan="8">কোনো ঔষধ নেই</td></tr>'}
-function renderSaleSelect(){let s=document.getElementById('saleProduct'),old=s.value;s.innerHTML='<option value="">ঔষধ নির্বাচন</option>'+db.products.map(p=>`<option value="${p.id}">${esc(p.name)} — স্টক ${stockPieces(p)} পিস</option>`).join('');if(db.products.some(p=>p.id===old))s.value=old;updateSaleInfo()}
-document.getElementById('saleProduct').addEventListener('change',()=>{let p=db.products.find(x=>x.id===document.getElementById('saleProduct').value);document.getElementById('salePrice').value=p?p.sell/(p.boxStrip*p.stripPiece):'';updateSaleInfo()});
-function updateSaleInfo(){let p=db.products.find(x=>x.id===document.getElementById('saleProduct').value);document.getElementById('saleInfo').textContent=p?`স্টকে ${stockPieces(p)} পিস | প্রতি পিস বিক্রয় মূল্য ${money(p.sell/(p.boxStrip*p.stripPiece))}`:''}
-function makeSale(){let p=db.products.find(x=>x.id===document.getElementById('saleProduct').value),qty=num('saleQty'),unit=num('salePrice');if(!p||qty<1||unit<=0){alert('ঔষধ, পরিমাণ ও মূল্য দিন।');return}if(stockPieces(p)<qty){alert('স্টকে পর্যাপ্ত ঔষধ নেই।');return}
- let total=qty*unit,paid=num('paid');if(paid>total){alert('জমার পরিমাণ মোট টাকার বেশি।');return}
- let left=stockPieces(p)-qty,perBox=p.boxStrip*p.stripPiece;p.box=Math.floor(left/perBox);left%=perBox;p.strip=Math.floor(left/p.stripPiece);p.piece=left%p.stripPiece;
- let s={id:String(Date.now()),date:new Date().toISOString(),customer:document.getElementById('customer').value.trim(),name:p.name,qty,unit,total,paid,due:total-paid,cost:qty*p.buy/perBox,profit:total-qty*p.buy/perBox};db.sales.push(s);save();document.getElementById('receipt').innerHTML=`<h3>বিক্রয় রসিদ</h3><p>${new Date(s.date).toLocaleString('bn-BD')}</p><p>ক্রেতা: ${esc(s.customer||'সাধারণ ক্রেতা')}</p><hr><p>${esc(s.name)} × ${qty} পিস</p><p>মোট: <b>${money(total)}</b></p><p>জমা: ${money(paid)}</p><p>বাকি: ${money(s.due)}</p><hr><p>ধন্যবাদ। আবার আসবেন।</p>`;document.getElementById('saleQty').value=1;document.getElementById('paid').value=0}
-function renderHistory(){document.getElementById('saleRows').innerHTML=db.sales.slice().reverse().map(s=>`<tr><td>${new Date(s.date).toLocaleString('bn-BD')}</td><td>${esc(s.customer||'সাধারণ')}</td><td>${esc(s.name)}</td><td>${s.qty}</td><td>${money(s.total)}</td><td>${money(s.paid)}</td><td>${money(s.due)}</td><td>${s.due?`<button class="secondary" onclick="collectDue('${s.id}')">বাকি জমা</button>`:'পরিশোধ'}</td></tr>`).join('')||'<tr><td colspan="8">বিক্রয় নেই</td></tr>'}
-function collectDue(id){let s=db.sales.find(x=>x.id===id);if(!s||!s.due)return;let a=Number(prompt('কত টাকা জমা হয়েছে?',s.due));if(!a||a<=0||a>s.due)return alert('সঠিক টাকা দিন');s.paid+=a;s.due-=a;save()}
-function renderReports(){let total=db.sales.reduce((a,s)=>a+s.total,0),profit=db.sales.reduce((a,s)=>a+s.profit,0),due=db.sales.reduce((a,s)=>a+s.due,0);document.getElementById('rSales').textContent=money(total);document.getElementById('rProfit').textContent=money(profit);document.getElementById('rDue').textContent=money(due);document.getElementById('alerts').innerHTML=db.products.filter(p=>stockPieces(p)<=10||(p.expiry&&new Date(p.expiry)<new Date(Date.now()+90*86400000))).map(p=>`<p class="low">${esc(p.name)} — স্টক ${stockPieces(p)} পিস ${p.expiry?' | মেয়াদ '+p.expiry:''}</p>`).join('')||'কোনো সতর্কতা নেই'}
-function renderAll(){document.getElementById('statMeds').textContent=db.products.length;document.getElementById('statStock').textContent=db.products.reduce((a,p)=>a+stockPieces(p),0);let today=new Date().toDateString();document.getElementById('statSales').textContent=money(db.sales.filter(s=>new Date(s.date).toDateString()===today).reduce((a,s)=>a+s.total,0));document.getElementById('statDue').textContent=money(db.sales.reduce((a,s)=>a+s.due,0));renderProducts();renderSaleSelect();renderHistory();renderReports()}
-function backup(){let a=document.createElement('a'),u=URL.createObjectURL(new Blob([JSON.stringify(db,null,2)],{type:'application/json'}));a.href=u;a.download='medicine-stock-backup.json';a.click();URL.revokeObjectURL(u)}
-function restore(e){let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{let d=JSON.parse(r.result);if(!Array.isArray(d.products)||!Array.isArray(d.sales))throw Error();db=d;save();alert('ব্যাকআপ ফিরিয়ে আনা হয়েছে')}catch{alert('ভুল ব্যাকআপ ফাইল')}};r.readAsText(f)}
+
+function tab(id,btn){
+document.querySelectorAll("main>section").forEach(x=>x.classList.add("hidden"));
+$(id).classList.remove("hidden");
+document.querySelectorAll("nav button").forEach(x=>x.classList.remove("active"));
+btn.classList.add("active");
+}
+
+function pieces(p){
+return Number(p.box||0)*Number(p.boxStrip||10)*Number(p.stripPiece||10)
++Number(p.strip||0)*Number(p.stripPiece||10)
++Number(p.piece||0);
+}
+
+function saveProduct(){
+let id=$("editId").value;
+let name=$("name").value.trim();
+
+if(!name||num("sell")<=0){
+alert("ঔষধের নাম ও বিক্রয় মূল্য দিন");
+return;
+}
+
+let p={
+id:id||String(Date.now()),
+name,
+batch:$("batch").value.trim(),
+expiry:$("expiry").value,
+boxStrip:Math.max(1,num("boxStrip")),
+stripPiece:Math.max(1,num("stripPiece")),
+box:num("box"),
+strip:num("strip"),
+piece:num("piece"),
+sell:num("sell"),
+discount:num("discount"),
+buy:num("buy")
+};
+
+if(p.discount<0||p.discount>100||p.box<0||p.strip<0||p.piece<0){
+alert("সঠিক তথ্য দিন");
+return;
+}
+
+let i=db.products.findIndex(x=>x.id===p.id);
+if(i>=0)db.products[i]=p;
+else db.products.push(p);
+
+clearForm();
+save();
+alert("ঔষধ সংরক্ষণ হয়েছে");
+}
+
+function clearForm(){
+["editId","name","batch","expiry","sell","buy"].forEach(x=>$(x).value="");
+["box","strip","piece"].forEach(x=>$(x).value=0);
+$("boxStrip").value=10;
+$("stripPiece").value=10;
+$("discount").value=0;
+$("formTitle").textContent="নতুন ঔষধ যোগ করুন";
+}
+
+function editProduct(id){
+let p=db.products.find(x=>x.id===id);
+if(!p)return;
+
+$("editId").value=p.id;
+$("name").value=p.name;
+$("batch").value=p.batch||"";
+$("expiry").value=(p.expiry||"").slice(0,7);
+$("boxStrip").value=p.boxStrip||10;
+$("stripPiece").value=p.stripPiece||10;
+$("box").value=p.box||0;
+$("strip").value=p.strip||0;
+$("piece").value=p.piece||0;
+$("sell").value=p.sell||0;
+$("discount").value=p.discount||0;
+$("buy").value=p.buy||0;
+$("formTitle").textContent="ঔষধ সম্পাদনা";
+
+window.scrollTo(0,0);
+}
+
+function deleteProduct(id){
+if(confirm("ঔষধটি মুছে ফেলবেন?")){
+db.products=db.products.filter(p=>p.id!==id);
+save();
+}
+}
+
+function renderProducts(){
+let q=$("search").value.toLowerCase();
+
+$("productList").innerHTML=db.products.filter(p=>
+(p.name+" "+(p.batch||"")).toLowerCase().includes(q)
+).map(p=>`
+<tr>
+<td>${esc(p.name)}</td>
+<td>${esc(p.batch||"-")}</td>
+<td>${bn(p.box)}</td>
+<td>${bn(p.strip)}</td>
+<td>${bn(p.piece)}</td>
+<td>${money(p.sell)}</td>
+<td>${bn(p.discount)}%</td>
+<td>${money(p.buy)}</td>
+<td>${esc(p.expiry||"-")}</td>
+<td>
+<button class="secondary" onclick="editProduct('${p.id}')">এডিট</button>
+<button class="danger" onclick="deleteProduct('${p.id}')">মুছুন</button>
+</td>
+</tr>
+`).join("")||"<tr><td colspan='10'>কোনো ঔষধ নেই</td></tr>";
+}
+
+function fillSelect(){
+["saleProduct","purchaseProduct"].forEach(id=>{
+let s=$(id),old=s.value;
+s.innerHTML='<option value="">ঔষধ নির্বাচন</option>';
+db.products.forEach(p=>{
+let o=document.createElement("option");
+o.value=p.id;
+o.textContent=p.name+" | "+(p.batch||"ব্যাচ নেই")+" | স্টক "+pieces(p)+" পিস";
+s.appendChild(o);
+});
+if(db.products.some(p=>p.id===old))s.value=old;
+});
+updateSaleInfo();
+updatePurchaseInfo();
+}
+
+function updateSaleInfo(){
+let p=db.products.find(x=>x.id===$("saleProduct").value);
+if(!p){$("saleInfo").textContent="";return;}
+let perBox=(p.boxStrip||10)*(p.stripPiece||10);
+$("salePrice").value=(p.sell||0)/perBox;
+$("saleInfo").textContent="স্টক: "+pieces(p)+" পিস";
+}
+
+function updatePurchaseInfo(){
+let p=db.products.find(x=>x.id===$("purchaseProduct").value);
+$("purchaseInfo").textContent=p?"বর্তমান স্টক: "+pieces(p)+" পিস":"";
+$("buyPrice").value=p?p.buy||0:"";
+}
+
+$("saleProduct").onchange=updateSaleInfo;
+$("purchaseProduct").onchange=updatePurchaseInfo;
+
+function makePurchase(){
+let p=db.products.find(x=>x.id===$("purchaseProduct").value);
+if(!p){alert("ঔষধ নির্বাচন করুন");return;}
+
+let b=num("buyBox"),s=num("buyStrip"),pc=num("buyPiece");
+let price=num("buyPrice"),paid=num("buyPaid");
+let perBox=(p.boxStrip||10)*(p.stripPiece||10);
+let qty=b*perBox+s*(p.stripPiece||10)+pc;
+let total=b*price+(s*(p.stripPiece||10)+pc)*(price/perBox);
+
+if(qty<=0||price<=0||paid>total){
+alert("ক্রয়ের সঠিক পরিমাণ ও মূল্য দিন");
+return;
+}
+
+p.box=(p.box||0)+b;
+p.strip=(p.strip||0)+s;
+p.piece=(p.piece||0)+pc;
+
+db.purchases.push({
+id:String(Date.now()),
+date:new Date().toISOString(),
+name:p.name,
+batch:p.batch||"",
+qty,total,paid,due:total-paid
+});
+
+save();
+$("buyBox").value=0;
+$("buyStrip").value=0;
+$("buyPiece").value=0;
+$("buyPaid").value=0;
+alert("ঔষধ ক্রয় সংরক্ষণ হয়েছে");
+}
+
+function makeSale(){
+let p=db.products.find(x=>x.id===$("saleProduct").value);
+let qty=num("saleQty");
+let price=num("salePrice");
+let paid=num("salePaid");
+
+if(!p||qty<=0||price<=0){
+alert("সঠিক ঔষধ, পরিমাণ ও মূল্য দিন");
+return;
+}
+
+if(pieces(p)<qty){
+alert("স্টকে পর্যাপ্ত ঔষধ নেই");
+return;
+}
+
+let total=qty*price;
+if(paid>total){
+alert("জমা টাকা মোট টাকার বেশি");
+return;
+}
+
+let perBox=(p.boxStrip||10)*(p.stripPiece||10);
+let left=pieces(p)-qty;
+
+p.box=Math.floor(left/perBox);
+left%=perBox;
+p.strip=Math.floor(left/(p.stripPiece||10));
+p.piece=left%(p.stripPiece||10);
+
+let cost=qty*(p.buy||0)/perBox;
+
+let sale={
+id:String(Date.now()),
+date:new Date().toISOString(),
+name:p.name,
+batch:p.batch||"",
+customer:$("customer").value,
+qty,price,total,paid,
+due:total-paid,
+cost,
+profit:total-cost
+};
+
+db.sales.push(sale);
+save();
+
+$("receipt").innerHTML=`
+<h3>Mohammad Pharmacy</h3>
+<p>ঔষধ: ${esc(p.name)}</p>
+<p>ব্যাচ: ${esc(p.batch||"-")}</p>
+<p>পরিমাণ: ${qty} পিস</p>
+<p>মোট: ${money(total)}</p>
+<p>জমা: ${money(paid)}</p>
+<p>বাকি: ${money(total-paid)}</p>
+<p>তারিখ: ${new Date().toLocaleString("bn-BD")}</p>
+<hr>
+<p>ধন্যবাদ। আবার আসবেন।</p>
+`;
+
+$("saleQty").value=1;
+$("salePaid").value=0;
+$("customer").value="";
+}
+
+function renderHistory(){
+let arr=[
+...db.purchases.map(x=>({...x,type:"ক্রয়"})),
+...db.sales.map(x=>({...x,type:"বিক্রয়"}))
+].sort((a,b)=>new Date(b.date)-new Date(a.date));
+
+$("historyList").innerHTML=arr.map(x=>`
+<tr>
+<td>${new Date(x.date).toLocaleDateString("bn-BD")}</td>
+<td>${x.type}</td>
+<td>${esc(x.name)}</td>
+<td>${bn(x.qty)} পিস</td>
+<td>${money(x.total)}</td>
+<td>${money(x.paid)}</td>
+<td>${money(x.due)}</td>
+</tr>
+`).join("")||"<tr><td colspan='7'>কোনো হিসাব নেই</td></tr>";
+}
+
+function renderAccount(){
+let sales=db.sales.reduce((a,x)=>a+x.total,0);
+let purchase=db.purchases.reduce((a,x)=>a+x.total,0);
+let profit=db.sales.reduce((a,x)=>a+(x.profit||0),0);
+let due=[...db.sales,...db.purchases].reduce((a,x)=>a+(x.due||0),0);
+
+$("totalSales").textContent=money(sales);
+$("totalPurchase").textContent=money(purchase);
+$("totalProfit").textContent=money(profit);
+$("accountDue").textContent=money(due);
+
+$("alerts").innerHTML=db.products.filter(p=>
+pieces(p)<=10||
+(p.expiry&&new Date(p.expiry+"-01")<new Date(Date.now()+90*86400000))
+).map(p=>`
+<p style="color:#c22">
+${esc(p.name)} | স্টক ${pieces(p)} পিস | মেয়াদ ${esc(p.expiry||"-")}
+</p>
+`).join("")||"কোনো সতর্কতা নেই";
+}
+
+function renderAll(){
+$("totalMed").textContent=bn(db.products.length);
+$("totalStock").textContent=bn(db.products.reduce((a,p)=>a+pieces(p),0));
+
+let today=new Date().toDateString();
+$("todaySale").textContent=money(
+db.sales.filter(x=>new Date(x.date).toDateString()===today)
+.reduce((a,x)=>a+x.total,0)
+);
+
+$("totalDue").textContent=money(
+[...db.sales,...db.purchases].reduce((a,x)=>a+(x.due||0),0)
+);
+
+renderProducts();
+fillSelect();
+renderHistory();
+renderAccount();
+}
+
+function backup(){
+let a=document.createElement("a");
+let u=URL.createObjectURL(new Blob([JSON.stringify(db,null,2)],{type:"application/json"}));
+a.href=u;
+a.download="mohammad-pharmacy-backup.json";
+a.click();
+URL.revokeObjectURL(u);
+}
+
+function restore(e){
+let file=e.target.files[0];
+if(!file)return;
+let r=new FileReader();
+r.onload=()=>{
+try{
+let d=JSON.parse(r.result);
+if(!Array.isArray(d.products)||!Array.isArray(d.sales))throw Error();
+db={products:d.products,sales:d.sales,purchases:d.purchases||[]};
+save();
+alert("ব্যাকআপ ফিরিয়ে আনা হয়েছে");
+}catch{
+alert("ভুল ব্যাকআপ ফাইল");
+}
+};
+r.readAsText(file);
+}
+
 renderAll();
 </script>
-</body></html>
+</body>
+</html>
