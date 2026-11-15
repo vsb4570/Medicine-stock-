@@ -1,20 +1,143 @@
-<!doctype html>
+
+<!DOCTYPE html>
 <html lang="bn">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<meta name="theme-color" content="#087f5b"><title>Mohammad Pharmacy</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#087f5b">
+<title>Mohammad Pharmacy</title>
+
 <style>
-*{box-sizing:border-box}body{margin:0;background:#f3f7f5;color:#18332a;font-family:system-ui,-apple-system,"Noto Sans Bengali",sans-serif}
-header{background:#087f5b;color:#fff;padding:14px 16px}header h1{margin:0;font-size:21px}header p{margin:4px 0 0;font-size:12px;opacity:.9}
-nav{display:flex;gap:8px;padding:10px;background:#fff;position:sticky;top:0;z-index:5;box-shadow:0 2px 5px #0001}nav button{flex:1;border:0;border-radius:9px;padding:12px 8px;background:#e7f1ec;color:#14543e;font-weight:700;font-size:14px}nav button.active{background:#087f5b;color:white}
-main{height:calc(100dvh - 125px);min-height:400px}iframe{border:0;width:100%;height:100%;display:none;background:#f4f7f6}iframe.active{display:block}
-.note{padding:8px 12px;background:#fff8df;color:#604b12;font-size:12px;text-align:center}
-</style></head>
+*{box-sizing:border-box}
+body{
+ margin:0;
+ background:#f3f7f5;
+ color:#18332a;
+ font-family:system-ui,"Noto Sans Bengali",sans-serif;
+}
+header{
+ background:#087f5b;
+ color:white;
+ padding:18px 16px;
+}
+header h1{margin:0;font-size:25px}
+header p{margin:5px 0 0;font-size:14px}
+nav{
+ display:flex;
+ gap:10px;
+ padding:12px;
+ background:white;
+}
+nav button{
+ flex:1;
+ border:0;
+ border-radius:12px;
+ padding:14px 5px;
+ background:#e7f1ec;
+ color:#14543e;
+ font-weight:bold;
+ font-size:16px;
+}
+nav button.active{
+ background:#087f5b;
+ color:white;
+}
+.note{
+ padding:12px;
+ background:#fff8df;
+ color:#604b12;
+ text-align:center;
+ font-size:14px;
+}
+main{
+ height:calc(100dvh - 195px);
+ min-height:400px;
+}
+iframe{
+ border:0;
+ width:100%;
+ height:100%;
+ display:none;
+ background:#f4f7f6;
+}
+iframe.active{display:block}
+</style>
+</head>
+
 <body>
-<header><h1>💊 Mohammad Pharmacy</h1><p>491/1 East Kazipara, Kafrul, Mirpur, Dhaka • 01325682483</p><p>ঔষধের স্টক • বিক্রয় • বাকি • রিপোর্ট • ব্যাকআপ</p></header>
-<nav><button id="stockBtn" class="active" onclick="showApp('stock')">স্টক ও বিক্রয়</button><button id="accountBtn" onclick="showApp('account')">দোকান হিসাব</button></nav>
-<div class="note">দুই অংশের তথ্য আলাদাভাবে সংরক্ষিত হয়। নিয়মিত দুই অংশ থেকেই JSON ব্যাকআপ রাখুন।</div>
-<main><iframe id="stockFrame" class="active" src="stock.html" title="Medicine Stock"></iframe><iframe id="accountFrame" src="accounting.html" title="Medicine Shop Accounting"></iframe></main>
+
+<header>
+<h1>💊 Mohammad Pharmacy</h1>
+<p>491/1 East Kazipara, Kafrul, Mirpur, Dhaka • 01325682483</p>
+<p>ঔষধের স্টক • বিক্রয় • বাকি • রিপোর্ট • ব্যাকআপ</p>
+</header>
+
+<nav>
+<button id="stockBtn" class="active"
+onclick="showApp('stock')">স্টক ও বিক্রয়</button>
+
+<button id="accountBtn"
+onclick="showApp('account')">দোকান হিসাব</button>
+</nav>
+
+<div class="note">
+দুই অংশের তথ্য আলাদাভাবে সংরক্ষিত হয়।
+নিয়মিত দুই অংশ থেকেই JSON ব্যাকআপ রাখুন।
+</div>
+
+<main>
+
+<iframe
+id="stockFrame"
+class="active"
+src="stock.html"
+title="Medicine Stock"
+onload="removeDuplicateHeader(this)">
+</iframe>
+
+<iframe
+id="accountFrame"
+src="accounting.html"
+title="Shop Accounting"
+onload="removeDuplicateHeader(this)">
+</iframe>
+
+</main>
+
 <script>
-function showApp(which){const stock=which==='stock';document.getElementById('stockFrame').classList.toggle('active',stock);document.getElementById('accountFrame').classList.toggle('active',!stock);document.getElementById('stockBtn').classList.toggle('active',stock);document.getElementById('accountBtn').classList.toggle('active',!stock)}
-</script></body></html>
+
+function removeDuplicateHeader(frame){
+ try{
+  const doc=frame.contentDocument;
+  const header=doc.querySelector("body > header");
+  if(header){
+   header.remove();
+  }
+ }catch(e){
+  console.log("Header adjustment failed",e);
+ }
+}
+
+function showApp(which){
+
+ const stock=which==='stock';
+
+ document.getElementById('stockFrame')
+ .classList.toggle('active',stock);
+
+ document.getElementById('accountFrame')
+ .classList.toggle('active',!stock);
+
+ document.getElementById('stockBtn')
+ .classList.toggle('active',stock);
+
+ document.getElementById('accountBtn')
+ .classList.toggle('active',!stock);
+
+}
+
+</script>
+
+</body>
+  </html>
+  
