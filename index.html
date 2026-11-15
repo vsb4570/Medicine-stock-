@@ -15,11 +15,6 @@ header p{margin:4px 0;font-size:13px}
 nav{display:flex;gap:7px;overflow:auto;padding:10px;background:white;position:sticky;top:0;z-index:5;border-bottom:1px solid var(--line)}
 nav button{white-space:nowrap;border:0;border-radius:9px;padding:10px 13px;background:#e8f2ed;color:var(--dark);font-weight:700}
 nav button.active,button.primary{background:var(--g);color:white}
-.subnav{display:flex;gap:8px;overflow:auto;padding:0 0 12px;margin-bottom:12px}
-.subnav button{white-space:nowrap;background:#e8f2ed;color:var(--dark)}
-.subnav button.active{background:var(--g);color:white}
-.subtab{display:none}
-.subtab.active{display:block}
 main{max-width:1200px;margin:auto;padding:12px}
 .tab{display:none}
 .tab.active{display:block}
@@ -69,7 +64,9 @@ body{background:white}
 
 <nav class="no-print">
 <button class="active" data-tab="dashboard">ড্যাশবোর্ড</button>
-<button data-tab="stockSales">স্টক ও বিক্রয়</button>
+<button data-tab="products">ঔষধ / স্টক</button>
+<button data-tab="purchase">ঔষধ ক্রয়</button>
+<button data-tab="sale">ঔষধ বিক্রয়</button>
 <button data-tab="history">ক্রয়-বিক্রয়</button>
 <button data-tab="accounts">দোকান হিসাব</button>
 <button data-tab="backup">ব্যাকআপ</button>
@@ -96,24 +93,14 @@ body{background:white}
 <h2>সাম্প্রতিক লেনদেন</h2>
 <div class="tablewrap">
 <table>
-<thead>
-<tr><th>তারিখ</th><th>ধরন</th><th>বিবরণ</th><th>মোট</th><th>জমা</th><th>বাকি</th></tr>
-</thead>
+<thead><tr><th>তারিখ</th><th>ধরন</th><th>বিবরণ</th><th>মোট</th><th>জমা</th><th>বাকি</th></tr></thead>
 <tbody id="recent"></tbody>
 </table>
 </div>
 </div>
 </section>
 
-<section id="stockSales" class="tab">
-
-<div class="subnav no-print">
-<button class="active" data-subtab="products">ঔষধ / স্টক</button>
-<button data-subtab="purchase">ঔষধ ক্রয়</button>
-<button data-subtab="sale">ঔষধ বিক্রয়</button>
-</div>
-
-<section id="products" class="subtab active">
+<section id="products" class="tab">
 <div class="panel">
 <h2 id="productHeading">নতুন ঔষধ যোগ করুন</h2>
 <input type="hidden" id="pId">
@@ -162,7 +149,7 @@ body{background:white}
 </div>
 </section>
 
-<section id="purchase" class="subtab">
+<section id="purchase" class="tab">
 <div class="panel">
 <h2>নতুন ঔষধ ক্রয়</h2>
 <div class="grid">
@@ -175,13 +162,11 @@ body{background:white}
 <div><label>সরবরাহকারী</label><input id="supplier" placeholder="ঐচ্ছিক"></div>
 </div>
 <div id="buyInfo" class="hint"></div>
-<div class="actions">
-<button onclick="makePurchase()">ক্রয় সংরক্ষণ</button>
-</div>
+<div class="actions"><button onclick="makePurchase()">ক্রয় সংরক্ষণ</button></div>
 </div>
 </section>
 
-<section id="sale" class="subtab">
+<section id="sale" class="tab">
 <div class="panel">
 <h2>নতুন ঔষধ বিক্রয়</h2>
 <div class="grid">
@@ -193,9 +178,7 @@ body{background:white}
 <div><label>জমা টাকা</label><input id="salePaid" type="number" min="0" value="0"></div>
 </div>
 <div id="saleInfo" class="hint"></div>
-<div class="actions">
-<button onclick="makeSale()">বিক্রয় সম্পন্ন</button>
-</div>
+<div class="actions"><button onclick="makeSale()">বিক্রয় সম্পন্ন</button></div>
 </div>
 
 <div class="panel">
@@ -203,8 +186,6 @@ body{background:white}
 <div id="receipt">এখনো কোনো বিক্রয় হয়নি।</div>
 <button class="secondary no-print" onclick="printReceipt()">রসিদ প্রিন্ট</button>
 </div>
-</section>
-
 </section>
 
 <section id="history" class="tab">
@@ -237,12 +218,7 @@ body{background:white}
 <div class="panel">
 <h2>অন্যান্য আয় / খরচ যোগ করুন</h2>
 <div class="grid">
-<div><label>ধরন</label>
-<select id="cashType">
-<option value="expense">খরচ</option>
-<option value="income">আয়</option>
-</select>
-</div>
+<div><label>ধরন</label><select id="cashType"><option value="expense">খরচ</option><option value="income">আয়</option></select></div>
 <div><label>বিবরণ</label><input id="cashNote" placeholder="যেমন: দোকান ভাড়া"></div>
 <div><label>টাকা</label><input id="cashAmount" type="number" min="0" step="any"></div>
 </div>
@@ -279,7 +255,8 @@ body{background:white}
 
 <script>
 const KEY='mohammadPharmacyCompleteV3';
-const $=id=>document.getElementById(id), n=id=>Number($(id).value)||0;
+const $=id=>document.getElementById(id);
+const n=id=>Number($(id).value)||0;
 const money=x=>'৳'+Number(x||0).toLocaleString('en-BD',{maximumFractionDigits:2});
 const bn=x=>Number(x||0).toLocaleString('bn-BD');
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -347,18 +324,11 @@ function splitStock(p,total){
 }
 
 function switchTab(id){
- document.querySelectorAll('main > .tab').forEach(x=>x.classList.toggle('active',x.id===id));
+ document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x.id===id));
  document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('active',x.dataset.tab===id));
- if(id==='stockSales'&&!document.querySelector('#stockSales .subtab.active'))switchSubTab('products');
-}
-
-function switchSubTab(id){
- document.querySelectorAll('#stockSales .subtab').forEach(x=>x.classList.toggle('active',x.id===id));
- document.querySelectorAll('.subnav button').forEach(x=>x.classList.toggle('active',x.dataset.subtab===id));
 }
 
 document.querySelectorAll('nav button').forEach(b=>b.addEventListener('click',()=>switchTab(b.dataset.tab)));
-document.querySelectorAll('.subnav button').forEach(b=>b.addEventListener('click',()=>switchSubTab(b.dataset.subtab)));
 
 function clearProduct(){
  ['pId','pName','pBatch','pExpiry','pSell','pBuy','pCompany'].forEach(id=>$(id).value='');
@@ -411,8 +381,7 @@ function editProduct(id){
 
  Object.keys(m).forEach(k=>$(k).value=p[m[k]]??'');
  $('productHeading').textContent='ঔষধ সম্পাদনা';
- switchTab('stockSales');
- switchSubTab('products');
+ switchTab('products');
  window.scrollTo(0,0);
 }
 
@@ -569,4 +538,44 @@ function printReceipt(){
  w.print();
 }
 
-func
+function addCash(){
+ let amount=n('cashAmount');
+ let note=$('cashNote').value.trim();
+ let type=$('cashType').value;
+
+ if(amount<=0||!note){
+  alert('বিবরণ ও টাকার পরিমাণ দিন');return;
+ }
+
+ db.cash.unshift({
+  id:String(Date.now()),date:new Date().toISOString(),
+  type,note,amount
+ });
+
+ $('cashAmount').value='';
+ $('cashNote').value='';
+ persist();
+}
+
+function deleteCash(id){
+ if(confirm('হিসাবটি মুছবেন?')){
+  db.cash=db.cash.filter(x=>x.id!==id);
+  persist();
+ }
+}
+
+function renderHistory(){
+ let all=[
+  ...db.purchases.map(x=>({...x,type:'ক্রয়'})),
+  ...db.sales.map(x=>({...x,type:'বিক্রয়'}))
+ ].sort((a,b)=>new Date(b.date)-new Date(a.date));
+
+ $('historyRows').innerHTML=all.map(x=>`<tr>
+ <td>${new Date(x.date).toLocaleString('bn-BD')}</td>
+ <td>${x.type}</td>
+ <td>${esc(x.name)}</td>
+ <td>${bn(x.qty)} পিস</td>
+ <td>${money(x.total)}</td>
+ <td>${money(x.paid)}</td>
+ <td>${money(x.due)}</td>
+ <td>${esc(x.party||x.customer||'-')}</td>
