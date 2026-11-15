@@ -572,5 +572,328 @@ function addAccount(){
 let type=document.getElementById("accountType").value;
 let title=document.getElementById("accountTitle").value.trim();
 let amount=Number(document.getElementById("accountAmount").value)||0;
-if(!title||amount<=0){alert("বিবরণ ও টাকার পরিমাণ লিখুন");return;}
-data.accounts.push({id:String(Date.
+
+if(!title||amount<=0){
+alert("বিবরণ ও টাকার পরিমাণ লিখুন");
+return;
+}
+
+data.accounts.push({
+id:String(Date.now()),
+date:dateNow(),
+type,
+title,
+amount
+});
+
+document.getElementById("accountTitle").value="";
+document.getElementById("accountAmount").value="";
+saveData();
+alert("হিসাব সংরক্ষণ হয়েছে");
+}
+
+function deleteAccount(id){
+if(!confirm("এই হিসাবটি মুছে ফেলবেন?"))return;
+data.accounts=data.accounts.filter(a=>a.id!==id);
+saveData();
+}
+
+function renderAccounts(){
+let income=data.accounts
+.filter(a=>a.type==="income")
+.reduce((s,a)=>s+(Number(a.amount)||0),0);
+
+let expense=data.accounts
+.filter(a=>a.type==="expense")
+.reduce((s,a)=>s+(Number(a.amount)||0),0);
+
+document.getElementById("accountIncome").innerText=money(income);
+document.getElementById("accountExpense").innerText=money(expense);
+document.getElementById("accountBalance").innerText=money(income-expense);
+
+document.getElementById("accountList").innerHTML=data.accounts.map(a=>`
+<tr>
+<td>${esc(a.date||"")}</td>
+<td>${a.type==="income"?"আয়":"খরচ"}</td>
+<td>${esc(a.title||"")}</td>
+<td>${money(a.amount)}</td>
+<td>
+<button class="action danger" onclick="deleteAccount('${a.id}')">মুছুন</button>
+</td>
+</tr>
+`).join("");
+}
+
+function renderCompanies(){
+document.getElementById("companyList").innerHTML=data.companies.map((c,i)=>`
+<tr>
+<td>${esc(c.name)}</td>
+<td>${Number(c.discount)||0}%</td>
+<td>
+<button class="action" onclick="editCompany(${i})">পরিবর্তন</button>
+<button class="action danger" onclick="deleteCompany(${i})">মুছুন</button>
+</td>
+</tr>
+`).join("");
+}
+
+function addCompany(){
+let name=document.getElementById("newCompanyName").value.trim();
+let discount=Number(document.getElementById("newCompanyDiscount").value)||0;
+
+if(!name){
+alert("কোম্পানির নাম লিখুন");
+return;
+}
+if(discount<0||discount>100){
+alert("ডিসকাউন্ট ০ থেকে ১০০ এর মধ্যে হতে হবে");
+return;
+}
+if(data.companies.some(c=>c.name.toLowerCase()===name.toLowerCase())){
+alert("এই কোম্পানি আগে থেকেই আছে");
+return;
+}
+
+data.companies.push({name,discount});
+document.getElementById("newCompanyName").value="";
+document.getElementById("newCompanyDiscount").value=0;
+saveData();
+alert("কোম্পানি যোগ হয়েছে");
+}
+
+function editCompany(index){
+let c=data.companies[index];
+if(!c)return;
+
+let name=prompt("কোম্পানির নাম",c.name);
+if(name===null)return;
+name=name.trim();
+if(!name){
+alert("কোম্পানির নাম খালি রাখা যাবে না");
+return;
+}
+
+let discount=prompt("ডিসকাউন্ট (%)",c.discount);
+if(discount===null)return;
+discount=Number(discount);
+
+if(!Number.isFinite(discount)||discount<0||discount>100){
+alert("সঠিক ডিসকাউন্ট লিখুন");
+return;
+}
+
+let oldName=c.name;
+if(data.companies.some((x,i)=>i!==index&&x.name.toLowerCase()===name.toLowerCase())){
+alert("এই কোম্পানির নাম আগে থেকেই আছে");
+return;
+}
+
+data.companies[index]={name,discount};
+
+data.products.forEach(p=>{
+if(p.company===oldName)p.company=name;
+});
+
+saveData();
+alert("কোম্পানির তথ্য পরিবর্তন হয়েছে");
+}
+
+function deleteCompany(index){
+let c=data.companies[index];
+if(!c)return;
+
+if(!confirm(c.name+" মুছে ফেলবেন?"))return;
+
+data.companies.splice(index,1);
+saveData();
+}
+
+function renderHistory(){
+let rows=[];
+
+data.purchases.forEach(p=>{
+rows.push({
+date:p.date,
+type:"ক্রয়",
+product:p.product,
+qty:p.qty,
+amount:p.amount,
+detail:p.supplier||""
+});
+});
+
+data.sales.forEach(s=>{
+rows.push({
+date:s.date,
+type:"বিক্রয়",
+product:s.product,
+qty:s.qty,
+amount:s.amount,
+detail:s.customer||""
+});
+});
+
+rows.sort((a,b)=>(b.date||"").localeCompare(a.date||""));
+
+document.getElementById("historyList").innerHTML=rows.map(r=>`
+<tr>
+<td>${esc(r.date||"")}</td>
+<td>${r.type}</td>
+<td>${esc(r.product||"")}</td>
+<td>${Number(r.qty)||0}</td>
+<td>${money(r.amount)}</td>
+<td>${esc(r.detail)}</td>
+</tr>
+`).join("");
+}
+
+function renderDashboard(){
+document.getElementById("totalProducts").innerText=data.products.length;
+
+let stock=data.products.reduce((s,p)=>s+totalPieces(p),0);
+document.getElementById("totalStock").innerText=stock;
+
+let today=dateNow();
+
+let sales=data.sales
+.filter(s=>s.date===today)
+.reduce((s,x)=>s+(Number(x.amount)||0),0);
+
+let purchases=data.purchases
+.filter(p=>p.date===today)
+.reduce((s,x)=>s+(Number(x.amount)||0),0);
+
+document.getElementById("todaySales").innerText=money(sales);
+document.getElementById("todayPurchases").innerText=money(purchases);
+
+document.getElementById("stockBuyValue").innerText=money(
+data.products.reduce((s,p)=>s+stockBuyValue(p),0)
+);
+
+document.getElementById("stockSellValue").innerText=money(
+data.products.reduce((s,p)=>s+stockSellValue(p),0)
+);
+
+let income=data.accounts
+.filter(a=>a.type==="income")
+.reduce((s,a)=>s+(Number(a.amount)||0),0);
+
+let expense=data.accounts
+.filter(a=>a.type==="expense")
+.reduce((s,a)=>s+(Number(a.amount)||0),0);
+
+document.getElementById("totalIncome").innerText=money(income);
+document.getElementById("totalExpense").innerText=money(expense);
+
+document.getElementById("lowStock").innerHTML=data.products
+.filter(p=>totalPieces(p)<=20)
+.map(p=>`
+<tr>
+<td>${esc(p.name)}</td>
+<td>${esc(p.company||"")}</td>
+<td>${esc(p.batch||"")}</td>
+<td>${totalPieces(p)}</td>
+</tr>
+`).join("");
+}
+
+function renderAll(){
+renderCompanySelect();
+renderSelects();
+renderStock();
+renderHistory();
+renderAccounts();
+renderCompanies();
+renderDashboard();
+updateDiscountPreview();
+}
+
+function esc(value){
+return String(value??"").replace(/[&<>"']/g,function(c){
+return {
+"&":"&amp;",
+"<":"&lt;",
+">":"&gt;",
+'"':"&quot;",
+"'":"&#39;"
+}[c];
+});
+}
+
+function downloadBackup(){
+let content=JSON.stringify(data,null,2);
+let blob=new Blob([content],{type:"application/json"});
+let url=URL.createObjectURL(blob);
+let a=document.createElement("a");
+
+a.href=url;
+a.download="Mohammad-Pharmacy-Backup-"+dateNow()+".json";
+document.body.appendChild(a);
+a.click();
+a.remove();
+
+URL.revokeObjectURL(url);
+}
+
+function restoreBackup(){
+let file=document.getElementById("backupFile").files[0];
+
+if(!file){
+alert("ব্যাকআপ ফাইল নির্বাচন করুন");
+return;
+}
+
+if(!confirm("বর্তমান তথ্যের পরিবর্তে ব্যাকআপের তথ্য ফিরিয়ে আনবেন?")){
+return;
+}
+
+let reader=new FileReader();
+
+reader.onload=function(e){
+try{
+let restored=JSON.parse(e.target.result);
+
+if(!restored||!Array.isArray(restored.products)){
+throw new Error("Invalid backup");
+}
+
+data={
+products:restored.products||[],
+purchases:restored.purchases||[],
+sales:restored.sales||[],
+accounts:restored.accounts||[],
+companies:restored.companies||defaultCompanies
+};
+
+defaultCompanies.forEach(c=>{
+if(!data.companies.some(x=>x.name.toLowerCase()===c.name.toLowerCase())){
+data.companies.push({...c});
+}
+});
+
+saveData();
+alert("ব্যাকআপ সফলভাবে ফিরিয়ে আনা হয়েছে");
+
+}catch(err){
+alert("ব্যাকআপ ফাইলটি সঠিক নয়");
+}
+};
+
+reader.readAsText(file);
+}
+
+document.getElementById("company").addEventListener("change",updateDiscountPreview);
+document.getElementById("buyPrice").addEventListener("input",updateDiscountPreview);
+document.getElementById("extraDiscount").addEventListener("input",updateDiscountPreview);
+
+document.getElementById("saleProduct").addEventListener("change",calculateSale);
+["saleBoxes","saleStrips","salePieces","discount"].forEach(id=>{
+document.getElementById(id).addEventListener("input",calculateSale);
+});
+
+loadData();
+renderAll();
+</script>
+</body>
+</html>
+
