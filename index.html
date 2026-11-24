@@ -57,7 +57,7 @@ hr{border:0;border-top:1px solid #ddd;margin:15px 0}
 
 <div class="container">
 
-<!-- STOCK -->
+<!-- স্টক হিসাব -->
 <section id="stock" class="section active">
 
 <div class="card">
@@ -83,6 +83,7 @@ hr{border:0;border-top:1px solid #ddd;margin:15px 0}
 <h3>বিক্রয়মূল্য</h3>
 <label>বক্স বিক্রয়মূল্য</label>
 <input type="number" id="sellBox" min="0" step="any" value="0">
+
 <div class="grid">
 <div><label>পাতা বিক্রয়মূল্য</label><input id="sellStrip" readonly></div>
 <div><label>পিস বিক্রয়মূল্য</label><input id="sellPiece" readonly></div>
@@ -92,6 +93,7 @@ hr{border:0;border-top:1px solid #ddd;margin:15px 0}
 <h3>ক্রয়মূল্য</h3>
 <label>ডিসকাউন্ট রেট (%)</label>
 <input type="number" id="discountRate" min="0" max="100" value="0">
+
 <div class="grid">
 <div><label>বক্স ক্রয়মূল্য</label><input id="buyBox" readonly></div>
 <div><label>পাতা ক্রয়মূল্য</label><input id="buyStrip" readonly></div>
@@ -102,6 +104,7 @@ hr{border:0;border-top:1px solid #ddd;margin:15px 0}
 সর্বমোট ক্রয়মূল্য: <b id="totalBuy">0.00</b> টাকা<br>
 সর্বমোট বিক্রয়মূল্য: <b id="totalSell">0.00</b> টাকা
 </div>
+
 <button class="btn" onclick="saveProduct()">ঔষধ সংরক্ষণ</button>
 <button class="btn gray" onclick="clearProduct()">নতুন এন্ট্রি</button>
 </div>
@@ -109,6 +112,7 @@ hr{border:0;border-top:1px solid #ddd;margin:15px 0}
 <div class="card">
 <h3>ঔষধের তালিকা</h3>
 <input id="searchMedicine" placeholder="ঔষধ বা কোম্পানি খুঁজুন" oninput="renderProducts()">
+
 <div class="tablewrap">
 <table>
 <thead>
@@ -123,7 +127,7 @@ hr{border:0;border-top:1px solid #ddd;margin:15px 0}
 </div>
 </section>
 
-<!-- SHOP -->
+<!-- দোকান হিসাব -->
 <section id="shop" class="section">
 
 <div class="card">
@@ -144,6 +148,7 @@ hr{border:0;border-top:1px solid #ddd;margin:15px 0}
 বিক্রয় = শেষ টাকা − বিনিয়োগ + ক্রয় + দোকান খরচ + বাসা খরচ − আগের দিনের টাকা
 <h3 id="dailySale">0.00 টাকা</h3>
 </div>
+
 <button class="btn" onclick="saveDaily()">দৈনিক হিসাব সংরক্ষণ</button>
 
 <div class="tablewrap">
@@ -154,6 +159,7 @@ hr{border:0;border-top:1px solid #ddd;margin:15px 0}
 </div>
 </div>
 
+<!-- মাসিক হিসাব -->
 <div class="card">
 <h3>মাসিক হিসাব</h3>
 <label>মাস নির্বাচন করুন</label>
@@ -173,60 +179,68 @@ hr{border:0;border-top:1px solid #ddd;margin:15px 0}
 মোট লাভ: <b id="mTotalProfit">0.00</b> টাকা<br>
 নিট লাভ: <b id="mNetProfit">0.00</b> টাকা<br>
 টাকা বৃদ্ধি বা হ্রাস: <b id="mMoneyChange">0.00</b> টাকা<br>
-নিট বাসা খরচ: <b id="mNetHome">0.00</b> টাকা
-<br>
-প্রকৃত জমা:
-<b id="monthDeposit">0.00 টাকা</b>
+নিট বাসা খরচ: <b id="mNetHome">0.00</b> টাকা<br>
+প্রকৃত জমা: <b id="monthDeposit">0.00 টাকা</b>
 </div>
+
 <button class="btn" onclick="savePeriod('month')">মাসিক হিসাব সংরক্ষণ</button>
 
 <div class="tablewrap">
 <table>
-<thead><tr>
+<thead>
+<tr>
 <th>মাস</th><th>বিক্রয়</th><th>মোট লাভ</th><th>নিট লাভ</th>
 <th>টাকা বৃদ্ধি/হ্রাস</th><th>নিট বাসা খরচ</th><th>প্রকৃত জমা</th><th>কাজ</th>
-</tr></thead>
+</tr>
+</thead>
 <tbody id="monthRows"></tbody>
 </table>
 </div>
 </div>
 
+<!-- বার্ষিক হিসাব -->
 <div class="card">
-<h3>বার্ষিক হিসাব</h3>
+<h3>বার্ষিক হিসাব (অটোমেটিক)</h3>
+
 <label>বছর নির্বাচন করুন</label>
 <input type="number" id="yearDate" min="2000" max="2200">
 
-<div class="grid">
-<div><label>বিক্রয়</label><input type="number" id="ySale" value="0"></div>
-<div><label>ক্রয়</label><input type="number" id="yPurchase" value="0"></div>
-<div><label>দোকান খরচ</label><input type="number" id="yShopCost" value="0"></div>
-<div><label>বছরের শেষে টাকা</label><input type="number" id="yEnd" value="0"></div>
-<div><label>বছরের শুরু টাকা</label><input type="number" id="yStart" value="0"></div>
-<div><label>বাসায় খরচ</label><input type="number" id="yHome" value="0"></div>
-<div><label>বিনিয়োগ</label><input type="number" id="yInvest" value="0"></div>
-</div>
-
 <div class="result">
+<div>মোট মাসের হিসাব পাওয়া গেছে: <b id="yMonthCount">0 / 12</b></div>
+<hr>
+বার্ষিক বিক্রয়: <b id="ySale">0.00</b> টাকা<br>
+বার্ষিক ক্রয়: <b id="yPurchase">0.00</b> টাকা<br>
+বার্ষিক দোকান খরচ: <b id="yShopCost">0.00</b> টাকা<br>
+বার্ষিক বাসায় খরচ: <b id="yHome">0.00</b> টাকা<br>
+বার্ষিক বিনিয়োগ: <b id="yInvest">0.00</b> টাকা<br>
+<hr>
+বছরের শুরু টাকা: <b id="yStart">0.00</b> টাকা<br>
+বছরের শেষে টাকা: <b id="yEnd">0.00</b> টাকা
+<hr>
 মোট লাভ: <b id="yTotalProfit">0.00</b> টাকা<br>
 নিট লাভ: <b id="yNetProfit">0.00</b> টাকা<br>
 টাকা বৃদ্ধি বা হ্রাস: <b id="yMoneyChange">0.00</b> টাকা<br>
 নিট বাসা খরচ: <b id="yNetHome">0.00</b> টাকা
-<br>
-প্রকৃত জমা:
-<b id="yearDeposit">0.00 টাকা</b>
+<hr>
+প্রকৃত জমা = বছরের শেষে টাকা − বছরের শুরু টাকা + বাসায় খরচ − বিনিয়োগ
+<h3 id="yearDeposit">0.00 টাকা</h3>
 </div>
-<button class="btn" onclick="savePeriod('year')">বার্ষিক হিসাব সংরক্ষণ</button>
+
+<p class="small">এই হিসাব জানুয়ারি থেকে ডিসেম্বর পর্যন্ত সংরক্ষিত মাসিক হিসাব থেকে স্বয়ংক্রিয়ভাবে তৈরি হয়। এখানে আলাদা করে তথ্য লিখতে হয় না।</p>
 
 <div class="tablewrap">
 <table>
-<thead><tr>
-<th>বছর</th><th>বিক্রয়</th><th>মোট লাভ</th><th>নিট লাভ</th>
-<th>টাকা বৃদ্ধি/হ্রাস</th><th>নিট বাসা খরচ</th><th>প্রকৃত জমা</th><th>কাজ</th>
-</tr></thead>
+<thead>
+<tr>
+<th>বছর</th><th>মাস</th><th>বিক্রয়</th><th>মোট লাভ</th>
+<th>নিট লাভ</th><th>প্রকৃত জমা</th>
+</tr>
+</thead>
 <tbody id="yearRows"></tbody>
 </table>
 </div>
 </div>
+
 </section>
 </div>
 
@@ -244,7 +258,7 @@ if(!Array.isArray(data.dailyAccounts))data.dailyAccounts=[];
 if(!Array.isArray(data.monthlyAccounts))data.monthlyAccounts=[];
 if(!Array.isArray(data.yearlyAccounts))data.yearlyAccounts=[];
 
-// পুরোনো কোম্পানির নাম সংরক্ষণ
+// পুরোনো কোম্পানির নাম রাখা
 let companies=[];
 data.companies.forEach(c=>{
  let n=typeof c==="string"?c:c?.name;
@@ -258,18 +272,23 @@ data.companies=companies;
 function saveData(){
  localStorage.setItem(KEY,JSON.stringify(data));
 }
+
 function val(id){
  return Number(document.getElementById(id).value)||0;
 }
+
 function put(id,v){
  document.getElementById(id).value=v??0;
 }
+
 function txt(id,v){
  document.getElementById(id).textContent=v;
 }
+
 function money(v){
  return (Number(v)||0).toFixed(2);
 }
+
 function showTab(id,btn){
  document.querySelectorAll(".section").forEach(x=>x.classList.remove("active"));
  document.getElementById(id).classList.add("active");
@@ -287,6 +306,7 @@ function renderCompanies(){
  });
 }
 
+// ঔষধের মূল্য হিসাব
 function calculatePrices(){
  let sell=val("sellBox");
  let perBox=val("stripsPerBox");
@@ -406,6 +426,7 @@ function renderProducts(){
   });
 
   let td=document.createElement("td");
+
   let edit=document.createElement("button");
   edit.className="btn blue";
   edit.textContent="সম্পাদনা";
@@ -421,6 +442,7 @@ function renderProducts(){
     renderProducts();
    }
   };
+
   td.append(edit,del);
   tr.appendChild(td);
   tbody.appendChild(tr);
@@ -430,6 +452,7 @@ function renderProducts(){
 function editProduct(id){
  let p=data.products.find(x=>String(x.id)===String(id));
  if(!p)return;
+
  put("editId",p.id);
  put("company",p.company||"");
  put("medicineName",p.name||"");
@@ -441,6 +464,7 @@ function editProduct(id){
  put("sellBox",p.sellBox??p.sell??0);
  put("discountRate",p.discountRate||0);
  calculatePrices();
+
  document.getElementById("stock").scrollIntoView({behavior:"smooth"});
 }
 
@@ -448,6 +472,7 @@ function editProduct(id){
 function dailyCalculation(){
  let sale=val("dEnd")-val("dInvest")+val("dPurchase")+
  val("dShopCost")+val("dHomeCost")-val("dPrevious");
+
  txt("dailySale",money(sale)+" টাকা");
  return sale;
 }
@@ -475,138 +500,171 @@ function saveDaily(){
  alert("দৈনিক হিসাব সংরক্ষণ হয়েছে");
 }
 
-// মাসিক ও বার্ষিক হিসাব
-function periodCalculation(type){
- let p=type==="month"?"m":"y";
- let totalProfit=val(p+"Sale")-val(p+"Purchase");
- let netProfit=totalProfit-val(p+"ShopCost");
- let moneyChange=val(p+"End")-val(p+"Start");
- let netHome=val(p+"Home")-val(p+"Invest");
+// মাসিক হিসাবের ফলাফল
+function periodCalculation(){
+ let totalProfit=val("mSale")-val("mPurchase");
+ let netProfit=totalProfit-val("mShopCost");
+ let moneyChange=val("mEnd")-val("mStart");
+ let netHome=val("mHome")-val("mInvest");
  let deposit=moneyChange+netHome;
 
- txt(p+"TotalProfit",money(totalProfit));
- txt(p+"NetProfit",money(netProfit));
- txt(p+"MoneyChange",money(moneyChange));
- txt(p+"NetHome",money(netHome));
- txt(type==="month"?"monthDeposit":"yearDeposit",money(deposit)+" টাকা");
+ txt("mTotalProfit",money(totalProfit));
+ txt("mNetProfit",money(netProfit));
+ txt("mMoneyChange",money(moneyChange));
+ txt("mNetHome",money(netHome));
+ txt("monthDeposit",money(deposit)+" টাকা");
+
  return deposit;
 }
 
 ["mSale","mPurchase","mShopCost","mEnd","mStart","mHome","mInvest"]
-.forEach(id=>document.getElementById(id).addEventListener("input",()=>periodCalculation("month")));
+.forEach(id=>document.getElementById(id).addEventListener("input",periodCalculation));
 
-["ySale","yPurchase","yShopCost","yEnd","yStart","yHome","yInvest"]
-.forEach(id=>document.getElementById(id).addEventListener("input",()=>periodCalculation("year")));
-
-function savePeriod(type){
- let month=type==="month";
- let p=month?"m":"y";
- let date=document.getElementById(month?"monthDate":"yearDate").value;
- if(!date)return alert("সময় নির্বাচন করুন");
+function savePeriod(){
+ let date=document.getElementById("monthDate").value;
+ if(!date)return alert("মাস নির্বাচন করুন");
 
  let r={
   date,
-  sale:val(p+"Sale"),
-  purchase:val(p+"Purchase"),
-  shopCost:val(p+"ShopCost"),
-  end:val(p+"End"),
-  start:val(p+"Start"),
-  home:val(p+"Home"),
-  invest:val(p+"Invest"),
-  deposit:periodCalculation(type)
+  sale:val("mSale"),
+  purchase:val("mPurchase"),
+  shopCost:val("mShopCost"),
+  end:val("mEnd"),
+  start:val("mStart"),
+  home:val("mHome"),
+  invest:val("mInvest"),
+  deposit:periodCalculation()
  };
 
- let arr=month?data.monthlyAccounts:data.yearlyAccounts;
- let i=arr.findIndex(x=>x.date===date);
- if(i>=0)arr[i]={...arr[i],...r};
- else arr.push(r);
+ let i=data.monthlyAccounts.findIndex(x=>x.date===date);
+ if(i>=0)data.monthlyAccounts[i]={...data.monthlyAccounts[i],...r};
+ else data.monthlyAccounts.push(r);
 
  saveData();
  renderAccounts();
- alert("হিসাব সংরক্ষণ হয়েছে");
+ renderYearAutomatically();
+ alert("মাসিক হিসাব সংরক্ষণ হয়েছে");
 }
 
-function renderAccounts(){
- let configs=[
-  ["dailyRows",data.dailyAccounts,r=>[r.date,money(r.sale),money(r.end)]],
-  ["monthRows",data.monthlyAccounts,r=>{
-   let profit=Number(r.sale||0)-Number(r.purchase||0);
-   let net=profit-Number(r.shopCost||0);
-   let change=Number(r.end||0)-Number(r.start||0);
-   let home=Number(r.home||0)-Number(r.invest||0);
-   return [r.date,money(r.sale),money(profit),money(net),money(change),money(home),money(change+home)];
-  }],
-  ["yearRows",data.yearlyAccounts,r=>{
-   let profit=Number(r.sale||0)-Number(r.purchase||0);
-   let net=profit-Number(r.shopCost||0);
-   let change=Number(r.end||0)-Number(r.start||0);
-   let home=Number(r.home||0)-Number(r.invest||0);
-   return [r.date,money(r.sale),money(profit),money(net),money(change),money(home),money(change+home)];
-  }]
- ];
-
- configs.forEach(([id,arr,get])=>{
-  let tbody=document.getElementById(id);
-  tbody.innerHTML="";
-  [...arr].sort((a,b)=>String(b.date).localeCompare(String(a.date))).forEach(r=>{
-   let tr=document.createElement("tr");
-   get(r).forEach(v=>{
-    let td=document.createElement("td");
-    td.textContent=v;
-    tr.appendChild(td);
-   });
-
-   let td=document.createElement("td");
-   let edit=document.createElement("button");
-   edit.className="btn blue";
-   edit.textContent="দেখুন";
-   edit.onclick=()=>loadPeriod(r,id==="monthRows"?"month":"year");
-
-   let del=document.createElement("button");
-   del.className="btn red";
-   del.textContent="মুছুন";
-   del.onclick=()=>{
-    if(confirm("এই হিসাব মুছে ফেলবেন?")){
-     let i=arr.findIndex(x=>x.date===r.date);
-     if(i>=0)arr.splice(i,1);
-     saveData();
-     renderAccounts();
-    }
-   };
-   td.append(edit,del);
-   tr.appendChild(td);
-   tbody.appendChild(tr);
-  });
- });
-}
-
-function loadPeriod(r,type){
- let p=type==="month"?"m":"y";
- let dateId=type==="month"?"monthDate":"yearDate";
- put(dateId,r.date);
- ["Sale","Purchase","ShopCost","End","Start","Home","Invest"].forEach(k=>{
-  put(p+k,r[k.toLowerCase()]??0);
- });
- periodCalculation(type);
+// মাসিক হিসাব সম্পাদনা
+function loadPeriod(r){
+ put("monthDate",r.date);
+ put("mSale",r.sale);
+ put("mPurchase",r.purchase);
+ put("mShopCost",r.shopCost);
+ put("mEnd",r.end);
+ put("mStart",r.start);
+ put("mHome",r.home);
+ put("mInvest",r.invest);
+ periodCalculation();
  document.getElementById("shop").scrollIntoView({behavior:"smooth"});
 }
 
-function initializeDates(){
- let now=new Date();
- let local=new Date(now.getTime()-now.getTimezoneOffset()*60000).toISOString().slice(0,10);
- put("dailyDate",local);
- put("monthDate",local.slice(0,7));
- put("yearDate",now.getFullYear());
+// দৈনিক হিসাব সম্পাদনা
+function loadDaily(r){
+ put("dailyDate",r.date);
+ put("dEnd",r.end);
+ put("dInvest",r.invest);
+ put("dPurchase",r.purchase);
+ put("dShopCost",r.shopCost);
+ put("dHomeCost",r.homeCost);
+ put("dPrevious",r.previous);
+ dailyCalculation();
+ document.getElementById("shop").scrollIntoView({behavior:"smooth"});
 }
 
-renderCompanies();
-renderProducts();
-renderAccounts();
-initializeDates();
-calculatePrices();
-dailyCalculation();
-periodCalculation("month");
-periodCalculation("year");
-</script>
-</body>
-</html>
+function removeDaily(date){
+ if(!confirm("এই দৈনিক হিসাব মুছে ফেলবেন?"))return;
+ data.dailyAccounts=data.dailyAccounts.filter(x=>x.date!==date);
+ saveData();
+ renderAccounts();
+}
+
+// মাসিক বা দৈনিক হিসাব মুছলে বার্ষিক হিসাবও আপডেট হবে
+function removeMonth(date){
+ if(!confirm("এই মাসের হিসাব মুছে ফেলবেন?"))return;
+ data.monthlyAccounts=data.monthlyAccounts.filter(x=>x.date!==date);
+ saveData();
+ renderAccounts();
+ renderYearAutomatically();
+}
+
+// বার্ষিক হিসাব সম্পূর্ণ অটোমেটিক
+function calculateYear(year){
+ year=String(year);
+
+ const months=data.monthlyAccounts.filter(r=>
+  String(r.date||"").startsWith(year+"-")
+ );
+
+ const sum=key=>months.reduce((total,r)=>
+  total+(Number(r[key])||0),0
+ );
+
+ const january=months.find(r=>r.date===year+"-01");
+ const december=months.find(r=>r.date===year+"-12");
+
+ const sale=sum("sale");
+ const purchase=sum("purchase");
+ const shopCost=sum("shopCost");
+ const home=sum("home");
+ const invest=sum("invest");
+
+ const start=january?Number(january.start)||0:0;
+ const end=december?Number(december.end)||0:0;
+
+ const totalProfit=sale-purchase;
+ const netProfit=totalProfit-shopCost;
+ const moneyChange=end-start;
+ const netHome=home-invest;
+ const deposit=end-start+home-invest;
+
+ return {
+  year,monthCount:months.length,
+  sale,purchase,shopCost,home,invest,
+  start,end,totalProfit,netProfit,
+  moneyChange,netHome,deposit
+ };
+}
+
+function renderYearAutomatically(){
+ const year=document.getElementById("yearDate").value;
+ if(!year)return;
+
+ const y=calculateYear(year);
+
+ txt("yMonthCount",y.monthCount+" / 12");
+ txt("ySale",money(y.sale));
+ txt("yPurchase",money(y.purchase));
+ txt("yShopCost",money(y.shopCost));
+ txt("yHome",money(y.home));
+ txt("yInvest",money(y.invest));
+ txt("yStart",money(y.start));
+ txt("yEnd",money(y.end));
+ txt("yTotalProfit",money(y.totalProfit));
+ txt("yNetProfit",money(y.netProfit));
+ txt("yMoneyChange",money(y.moneyChange));
+ txt("yNetHome",money(y.netHome));
+ txt("yearDeposit",money(y.deposit)+" টাকা");
+
+ renderYearTable();
+}
+
+function renderYearTable(){
+ const tbody=document.getElementById("yearRows");
+ tbody.innerHTML="";
+
+ const years=[...new Set(
+  data.monthlyAccounts.map(r=>String(r.date||"").slice(0,4))
+ )];
+
+ const selected=String(document.getElementById("yearDate").value);
+ if(selected&&!years.includes(selected))years.push(selected);
+
+ years.sort((a,b)=>b.localeCompare(a)).forEach(year=>{
+  const y=calculateYear(year);
+  const tr=document.createElement("tr");
+
+  [
+   y.year,y.monthCount+" / 12",
+  
