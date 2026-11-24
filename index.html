@@ -196,7 +196,7 @@ hr{border:0;border-top:1px solid #ddd;margin:16px 0}
 </div>
 
 <div class="result">
-প্রকৃত জমা = শেষের টাকা − শুরুর টাকা -বাসার খরচ − বিনিয়োগ
+প্রকৃত জমা = শেষের টাকা − শুরুর টাকা + বাসার খরচ − বিনিয়োগ
 <h3 id="monthDeposit">0.00 টাকা</h3>
 </div>
 <button class="btn" onclick="savePeriod('month')">মাসিক হিসাব সংরক্ষণ</button>
@@ -496,7 +496,7 @@ function saveDaily(){
 // মাসিক ও বার্ষিক প্রকৃত জমা
 function periodCalculation(type){
  let p=type==="month"?"m":"y";
- let deposit=val(p+"End")-val(p+"Start")-
+ let deposit=val(p+"End")-val(p+"Start")+
  (val(p+"Home")-val(p+"Invest"));
  txt(type==="month"?"monthDeposit":"yearDeposit",money(deposit)+" টাকা");
  return deposit;
