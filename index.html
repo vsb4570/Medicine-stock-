@@ -4,42 +4,50 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>মোহাম্মদ ফার্মেসি</title>
+<title>মোহাম্মদ ফার্মেসী</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;background:#f1f5f4;font-family:Arial,sans-serif;color:#222}
-header{background:#087b55;color:white;text-align:center;padding:17px}
-header h2{margin:0}
-nav{display:flex;background:#075b42}
-nav button{flex:1;padding:14px 5px;border:0;background:none;color:white;font-size:16px}
+body{margin:0;background:#f1f5f4;color:#222;font-family:Arial,sans-serif}
+header{background:#087b55;color:white;text-align:center;padding:16px 10px}
+header h2{margin:0 0 8px}
+header p{margin:5px;font-size:14px}
+header a{color:white;text-decoration:none}
+nav{display:flex;background:#075b42;position:sticky;top:0;z-index:5}
+nav button{flex:1;padding:13px 4px;background:none;border:0;color:white;font-size:15px}
 nav button.active{background:white;color:#075b42;font-weight:bold}
-.container{max-width:1000px;margin:auto;padding:10px}
+.container{max-width:1100px;margin:auto;padding:10px}
 .section{display:none}
 .section.active{display:block}
-.card{background:white;border-radius:10px;padding:14px;margin:12px 0;box-shadow:0 2px 6px #0001}
+.card{background:white;border-radius:10px;padding:14px;margin:12px 0;box-shadow:0 2px 7px #0001}
 h3{color:#087b55;margin-top:0}
 label{display:block;font-weight:bold;margin:10px 0 5px}
 input{width:100%;padding:11px;border:1px solid #bbb;border-radius:6px;font-size:15px}
 input[readonly]{background:#edf3f0}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.btn{border:0;border-radius:6px;padding:11px 15px;background:#087b55;color:white;font-size:15px;margin:5px 2px}
+.btn{border:0;border-radius:6px;padding:10px 14px;background:#087b55;color:white;font-size:14px;margin:5px 2px;cursor:pointer}
 .btn.red{background:#c0392b}
 .btn.blue{background:#2471a3}
 .btn.gray{background:#555}
-.result{background:#e8f6ef;padding:12px;border-radius:7px;margin-top:12px;line-height:1.8}
+.result{background:#e8f6ef;padding:12px;border-radius:7px;margin-top:12px;line-height:1.9}
+.result h3{margin-bottom:0}
 .tablewrap{overflow-x:auto}
 table{border-collapse:collapse;width:100%;min-width:650px;margin-top:10px}
 th,td{border:1px solid #ddd;padding:8px;text-align:center;font-size:13px}
 th{background:#087b55;color:white}
-hr{border:0;border-top:1px solid #ddd;margin:16px 0}
-@media(max-width:500px){.grid{grid-template-columns:1fr}nav button{font-size:14px}}
+hr{border:0;border-top:1px solid #ddd;margin:15px 0}
+.small{font-size:12px;color:#555}
+@media(max-width:500px){
+ .grid{grid-template-columns:1fr}
+ nav button{font-size:13px}
+}
 </style>
 </head>
 <body>
 
 <header>
-<h1>মোহাম্মদ ফার্মেসি</h1>
-<p style="margin:5px 0 0">স্টক ও দোকান হিসাব</p>
+<h2>মোহাম্মদ ফার্মেসী</h2>
+<p>ঠিকানা: ৪৯১/১ পূর্ব কাজিপাড়া, মিরপুর, ঢাকা</p>
+<p>মোবাইল: <a href="tel:01325682483">01325682483</a></p>
 </header>
 
 <nav>
@@ -49,93 +57,58 @@ hr{border:0;border-top:1px solid #ddd;margin:16px 0}
 
 <div class="container">
 
+<!-- STOCK -->
 <section id="stock" class="section active">
 
 <div class="card">
 <h3>ঔষধের তথ্য</h3>
-
 <input type="hidden" id="editId">
 
 <label>কোম্পানির নাম</label>
-<input id="company" list="companyList" placeholder="পুরোনো নাম নির্বাচন বা নতুন নাম লিখুন" autocomplete="off">
+<input id="company" list="companyList" placeholder="পুরোনো নাম নির্বাচন বা নতুন নাম লিখুন">
 <datalist id="companyList"></datalist>
 
 <label>ঔষধের নাম</label>
-<input id="medicineName" placeholder="ঔষধের নাম লিখুন">
+<input id="medicineName" placeholder="ঔষধের নাম">
 
 <div class="grid">
-<div>
-<label>বক্স</label>
-<input type="number" id="boxes" min="0" value="0">
-</div>
-<div>
-<label>প্রতি বক্সে পাতা</label>
-<input type="number" id="stripsPerBox" min="1" value="10">
-</div>
-<div>
-<label>পাতা</label>
-<input type="number" id="strips" min="0" value="0">
-</div>
-<div>
-<label>প্রতি পাতায় পিস</label>
-<input type="number" id="piecesPerStrip" min="1" value="10">
-</div>
-<div>
-<label>পিস</label>
-<input type="number" id="pieces" min="0" value="0">
-</div>
+<div><label>বক্স</label><input type="number" id="boxes" min="0" value="0"></div>
+<div><label>প্রতি বক্সে পাতা</label><input type="number" id="stripsPerBox" min="1" value="10"></div>
+<div><label>পাতা</label><input type="number" id="strips" min="0" value="0"></div>
+<div><label>প্রতি পাতায় পিস</label><input type="number" id="piecesPerStrip" min="1" value="10"></div>
+<div><label>পিস</label><input type="number" id="pieces" min="0" value="0"></div>
 </div>
 
 <hr>
 <h3>বিক্রয়মূল্য</h3>
-
 <label>বক্স বিক্রয়মূল্য</label>
 <input type="number" id="sellBox" min="0" step="any" value="0">
-
 <div class="grid">
-<div>
-<label>পাতা বিক্রয়মূল্য</label>
-<input type="number" id="sellStrip" readonly>
-</div>
-<div>
-<label>পিস বিক্রয়মূল্য</label>
-<input type="number" id="sellPiece" readonly>
-</div>
+<div><label>পাতা বিক্রয়মূল্য</label><input id="sellStrip" readonly></div>
+<div><label>পিস বিক্রয়মূল্য</label><input id="sellPiece" readonly></div>
 </div>
 
 <hr>
 <h3>ক্রয়মূল্য</h3>
-
 <label>ডিসকাউন্ট রেট (%)</label>
-<input type="number" id="discountRate" min="0" max="100" step="any" value="0">
-
+<input type="number" id="discountRate" min="0" max="100" value="0">
 <div class="grid">
-<div>
-<label>বক্স ক্রয়মূল্য</label>
-<input id="buyBox" readonly>
-</div>
-<div>
-<label>পাতা ক্রয়মূল্য</label>
-<input id="buyStrip" readonly>
-</div>
-<div>
-<label>পিস ক্রয়মূল্য</label>
-<input id="buyPiece" readonly>
-</div>
+<div><label>বক্স ক্রয়মূল্য</label><input id="buyBox" readonly></div>
+<div><label>পাতা ক্রয়মূল্য</label><input id="buyStrip" readonly></div>
+<div><label>পিস ক্রয়মূল্য</label><input id="buyPiece" readonly></div>
 </div>
 
 <div class="result">
 সর্বমোট ক্রয়মূল্য: <b id="totalBuy">0.00</b> টাকা<br>
 সর্বমোট বিক্রয়মূল্য: <b id="totalSell">0.00</b> টাকা
 </div>
-
-<button class="btn" onclick="saveProduct()">ঔষধ সংরক্ষণ করুন</button>
+<button class="btn" onclick="saveProduct()">ঔষধ সংরক্ষণ</button>
 <button class="btn gray" onclick="clearProduct()">নতুন এন্ট্রি</button>
 </div>
 
 <div class="card">
 <h3>ঔষধের তালিকা</h3>
-<input id="searchMedicine" placeholder="ঔষধ বা কোম্পানির নাম খুঁজুন" oninput="renderProducts()">
+<input id="searchMedicine" placeholder="ঔষধ বা কোম্পানি খুঁজুন" oninput="renderProducts()">
 <div class="tablewrap">
 <table>
 <thead>
@@ -150,6 +123,7 @@ hr{border:0;border-top:1px solid #ddd;margin:16px 0}
 </div>
 </section>
 
+<!-- SHOP -->
 <section id="shop" class="section">
 
 <div class="card">
@@ -196,13 +170,22 @@ hr{border:0;border-top:1px solid #ddd;margin:16px 0}
 </div>
 
 <div class="result">
-প্রকৃত জমা = শেষের টাকা − শুরুর টাকা + বাসার খরচ − বিনিয়োগ
+মোট লাভ: <b id="mTotalProfit">0.00</b> টাকা<br>
+নিট লাভ: <b id="mNetProfit">0.00</b> টাকা<br>
+টাকা বৃদ্ধি বা হ্রাস: <b id="mMoneyChange">0.00</b> টাকা<br>
+নিট বাসা খরচ: <b id="mNetHome">0.00</b> টাকা
+<hr>
+প্রকৃত জমা = টাকা বৃদ্ধি বা হ্রাস + নিট বাসা খরচ
 <h3 id="monthDeposit">0.00 টাকা</h3>
 </div>
 <button class="btn" onclick="savePeriod('month')">মাসিক হিসাব সংরক্ষণ</button>
+
 <div class="tablewrap">
 <table>
-<thead><tr><th>মাস</th><th>বিক্রয়</th><th>প্রকৃত জমা</th><th>কাজ</th></tr></thead>
+<thead><tr>
+<th>মাস</th><th>বিক্রয়</th><th>মোট লাভ</th><th>নিট লাভ</th>
+<th>টাকা বৃদ্ধি/হ্রাস</th><th>নিট বাসা খরচ</th><th>প্রকৃত জমা</th><th>কাজ</th>
+</tr></thead>
 <tbody id="monthRows"></tbody>
 </table>
 </div>
@@ -224,19 +207,27 @@ hr{border:0;border-top:1px solid #ddd;margin:16px 0}
 </div>
 
 <div class="result">
-প্রকৃত জমা = শেষের টাকা − শুরুর টাকা − (বাসার খরচ − বিনিয়োগ)
+মোট লাভ: <b id="yTotalProfit">0.00</b> টাকা<br>
+নিট লাভ: <b id="yNetProfit">0.00</b> টাকা<br>
+টাকা বৃদ্ধি বা হ্রাস: <b id="yMoneyChange">0.00</b> টাকা<br>
+নিট বাসা খরচ: <b id="yNetHome">0.00</b> টাকা
+<hr>
+প্রকৃত জমা = টাকা বৃদ্ধি বা হ্রাস + নিট বাসা খরচ
 <h3 id="yearDeposit">0.00 টাকা</h3>
 </div>
 <button class="btn" onclick="savePeriod('year')">বার্ষিক হিসাব সংরক্ষণ</button>
+
 <div class="tablewrap">
 <table>
-<thead><tr><th>বছর</th><th>বিক্রয়</th><th>প্রকৃত জমা</th><th>কাজ</th></tr></thead>
+<thead><tr>
+<th>বছর</th><th>বিক্রয়</th><th>মোট লাভ</th><th>নিট লাভ</th>
+<th>টাকা বৃদ্ধি/হ্রাস</th><th>নিট বাসা খরচ</th><th>প্রকৃত জমা</th><th>কাজ</th>
+</tr></thead>
 <tbody id="yearRows"></tbody>
 </table>
 </div>
 </div>
 </section>
-
 </div>
 
 <script>
@@ -253,7 +244,7 @@ if(!Array.isArray(data.dailyAccounts))data.dailyAccounts=[];
 if(!Array.isArray(data.monthlyAccounts))data.monthlyAccounts=[];
 if(!Array.isArray(data.yearlyAccounts))data.yearlyAccounts=[];
 
-// পুরোনো কোম্পানি ও ঔষধের তথ্য রাখা
+// পুরোনো কোম্পানির নাম সংরক্ষণ
 let companies=[];
 data.companies.forEach(c=>{
  let n=typeof c==="string"?c:c?.name;
@@ -267,7 +258,6 @@ data.companies=companies;
 function saveData(){
  localStorage.setItem(KEY,JSON.stringify(data));
 }
-
 function val(id){
  return Number(document.getElementById(id).value)||0;
 }
@@ -287,7 +277,6 @@ function showTab(id,btn){
  btn.classList.add("active");
 }
 
-// কোম্পানির নামের তালিকা শুধু ঔষধের তথ্য অংশে
 function renderCompanies(){
  let list=document.getElementById("companyList");
  list.innerHTML="";
@@ -298,17 +287,14 @@ function renderCompanies(){
  });
 }
 
-// মূল্য হিসাব
 function calculatePrices(){
  let sell=val("sellBox");
  let perBox=val("stripsPerBox");
  let perStrip=val("piecesPerStrip");
  let discount=val("discountRate");
 
- let valid=perBox>0&&perStrip>0&&discount>=0&&discount<=100;
- if(!valid){
-  ["sellStrip","sellPiece","buyBox","buyStrip","buyPiece","totalBuy","totalSell"]
-  .forEach(id=>put(id,0));
+ if(perBox<=0||perStrip<=0||discount<0||discount>100){
+  ["sellStrip","sellPiece","buyBox","buyStrip","buyPiece","totalBuy","totalSell"].forEach(id=>put(id,0));
   return;
  }
 
@@ -351,7 +337,7 @@ function saveProduct(){
  let sell=val("sellBox");
  let discount=val("discountRate");
 
- if(!company)return alert("কোম্পানির নাম লিখুন বা নির্বাচন করুন");
+ if(!company)return alert("কোম্পানির নাম লিখুন");
  if(!name)return alert("ঔষধের নাম লিখুন");
  if(perBox<=0||perStrip<=0)return alert("পাতা ও পিসের সংখ্যা সঠিকভাবে লিখুন");
  if(discount<0||discount>100)return alert("ডিসকাউন্ট ০ থেকে ১০০ এর মধ্যে দিন");
@@ -369,15 +355,14 @@ function saveProduct(){
   company,name,
   boxes:val("boxes"),strips:val("strips"),pieces:val("pieces"),
   stripsPerBox:perBox,piecesPerStrip:perStrip,
-  sellBox:sell,sellStrip,sellPiece,
-  discountRate:discount,
+  sellBox:sell,sellStrip,sellPiece,discountRate:discount,
   buyBox:buy,buyStrip,buyPiece,
   totalBuy:val("boxes")*buy+val("strips")*buyStrip+val("pieces")*buyPiece,
   totalSell:val("boxes")*sell+val("strips")*sellStrip+val("pieces")*sellPiece
  };
 
- let index=data.products.findIndex(x=>String(x.id)===String(p.id));
- if(index>=0)data.products[index]={...data.products[index],...p};
+ let i=data.products.findIndex(x=>String(x.id)===String(p.id));
+ if(i>=0)data.products[i]={...data.products[i],...p};
  else data.products.push(p);
 
  saveData();
@@ -399,7 +384,7 @@ function renderProducts(){
   let sell=Number(p.sellBox??p.sell??0);
   let perBox=Number(p.stripsPerBox||10);
   let perStrip=Number(p.piecesPerStrip||10);
-  let buy=sell*(1-Number(p.discountRate||0)/100);
+  let buy=Number(p.buyBox??sell*(1-Number(p.discountRate||0)/100));
 
   let totalBuy=Number(p.totalBuy??(
    Number(p.boxes||0)*buy+
@@ -413,10 +398,8 @@ function renderProducts(){
   ));
 
   let tr=document.createElement("tr");
-  [
-   p.company,p.name,p.boxes||0,p.strips||0,p.pieces||0,
-   money(buy),money(sell),money(totalBuy),money(totalSell)
-  ].forEach(v=>{
+  [p.company,p.name,p.boxes||0,p.strips||0,p.pieces||0,
+   money(buy),money(sell),money(totalBuy),money(totalSell)].forEach(v=>{
    let td=document.createElement("td");
    td.textContent=v??"";
    tr.appendChild(td);
@@ -447,7 +430,6 @@ function renderProducts(){
 function editProduct(id){
  let p=data.products.find(x=>String(x.id)===String(id));
  if(!p)return;
-
  put("editId",p.id);
  put("company",p.company||"");
  put("medicineName",p.name||"");
@@ -485,7 +467,7 @@ function saveDaily(){
  };
 
  let i=data.dailyAccounts.findIndex(x=>x.date===date);
- if(i>=0)data.dailyAccounts[i]=r;
+ if(i>=0)data.dailyAccounts[i]={...data.dailyAccounts[i],...r};
  else data.dailyAccounts.push(r);
 
  saveData();
@@ -493,21 +475,28 @@ function saveDaily(){
  alert("দৈনিক হিসাব সংরক্ষণ হয়েছে");
 }
 
-// মাসিক ও বার্ষিক প্রকৃত জমা
+// মাসিক ও বার্ষিক হিসাব
 function periodCalculation(type){
  let p=type==="month"?"m":"y";
- let deposit=val(p+"End")-val(p+"Start")+
- (val(p+"Home")-val(p+"Invest"));
+ let totalProfit=val(p+"Sale")-val(p+"Purchase");
+ let netProfit=totalProfit-val(p+"ShopCost");
+ let moneyChange=val(p+"End")-val(p+"Start");
+ let netHome=val(p+"Home")-val(p+"Invest");
+ let deposit=moneyChange+netHome;
+
+ txt(p+"TotalProfit",money(totalProfit));
+ txt(p+"NetProfit",money(netProfit));
+ txt(p+"MoneyChange",money(moneyChange));
+ txt(p+"NetHome",money(netHome));
  txt(type==="month"?"monthDeposit":"yearDeposit",money(deposit)+" টাকা");
  return deposit;
 }
 
-["mEnd","mStart","mHome","mInvest"].forEach(id=>
- document.getElementById(id).addEventListener("input",()=>periodCalculation("month"))
-);
-["yEnd","yStart","yHome","yInvest"].forEach(id=>
- document.getElementById(id).addEventListener("input",()=>periodCalculation("year"))
-);
+["mSale","mPurchase","mShopCost","mEnd","mStart","mHome","mInvest"]
+.forEach(id=>document.getElementById(id).addEventListener("input",()=>periodCalculation("month")));
+
+["ySale","yPurchase","yShopCost","yEnd","yStart","yHome","yInvest"]
+.forEach(id=>document.getElementById(id).addEventListener("input",()=>periodCalculation("year")));
 
 function savePeriod(type){
  let month=type==="month";
@@ -516,15 +505,20 @@ function savePeriod(type){
  if(!date)return alert("সময় নির্বাচন করুন");
 
  let r={
-  date,sale:val(p+"Sale"),purchase:val(p+"Purchase"),
-  shopCost:val(p+"ShopCost"),end:val(p+"End"),
-  start:val(p+"Start"),home:val(p+"Home"),
-  invest:val(p+"Invest"),deposit:periodCalculation(type)
+  date,
+  sale:val(p+"Sale"),
+  purchase:val(p+"Purchase"),
+  shopCost:val(p+"ShopCost"),
+  end:val(p+"End"),
+  start:val(p+"Start"),
+  home:val(p+"Home"),
+  invest:val(p+"Invest"),
+  deposit:periodCalculation(type)
  };
 
  let arr=month?data.monthlyAccounts:data.yearlyAccounts;
  let i=arr.findIndex(x=>x.date===date);
- if(i>=0)arr[i]=r;
+ if(i>=0)arr[i]={...arr[i],...r};
  else arr.push(r);
 
  saveData();
@@ -535,8 +529,20 @@ function savePeriod(type){
 function renderAccounts(){
  let configs=[
   ["dailyRows",data.dailyAccounts,r=>[r.date,money(r.sale),money(r.end)]],
-  ["monthRows",data.monthlyAccounts,r=>[r.date,money(r.sale),money(r.deposit)]],
-  ["yearRows",data.yearlyAccounts,r=>[r.date,money(r.sale),money(r.deposit)]]
+  ["monthRows",data.monthlyAccounts,r=>{
+   let profit=Number(r.sale||0)-Number(r.purchase||0);
+   let net=profit-Number(r.shopCost||0);
+   let change=Number(r.end||0)-Number(r.start||0);
+   let home=Number(r.home||0)-Number(r.invest||0);
+   return [r.date,money(r.sale),money(profit),money(net),money(change),money(home),money(change+home)];
+  }],
+  ["yearRows",data.yearlyAccounts,r=>{
+   let profit=Number(r.sale||0)-Number(r.purchase||0);
+   let net=profit-Number(r.shopCost||0);
+   let change=Number(r.end||0)-Number(r.start||0);
+   let home=Number(r.home||0)-Number(r.invest||0);
+   return [r.date,money(r.sale),money(profit),money(net),money(change),money(home),money(change+home)];
+  }]
  ];
 
  configs.forEach(([id,arr,get])=>{
@@ -549,11 +555,17 @@ function renderAccounts(){
     td.textContent=v;
     tr.appendChild(td);
    });
+
    let td=document.createElement("td");
-   let btn=document.createElement("button");
-   btn.className="btn red";
-   btn.textContent="মুছুন";
-   btn.onclick=()=>{
+   let edit=document.createElement("button");
+   edit.className="btn blue";
+   edit.textContent="দেখুন";
+   edit.onclick=()=>loadPeriod(r,id==="monthRows"?"month":"year");
+
+   let del=document.createElement("button");
+   del.className="btn red";
+   del.textContent="মুছুন";
+   del.onclick=()=>{
     if(confirm("এই হিসাব মুছে ফেলবেন?")){
      let i=arr.findIndex(x=>x.date===r.date);
      if(i>=0)arr.splice(i,1);
@@ -561,18 +573,27 @@ function renderAccounts(){
      renderAccounts();
     }
    };
-   td.appendChild(btn);
+   td.append(edit,del);
    tr.appendChild(td);
    tbody.appendChild(tr);
   });
  });
 }
 
-// তারিখ নির্ধারণ
+function loadPeriod(r,type){
+ let p=type==="month"?"m":"y";
+ let dateId=type==="month"?"monthDate":"yearDate";
+ put(dateId,r.date);
+ ["Sale","Purchase","ShopCost","End","Start","Home","Invest"].forEach(k=>{
+  put(p+k,r[k.toLowerCase()]??0);
+ });
+ periodCalculation(type);
+ document.getElementById("shop").scrollIntoView({behavior:"smooth"});
+}
+
 function initializeDates(){
  let now=new Date();
- let local=new Date(now.getTime()-now.getTimezoneOffset()*60000)
- .toISOString().slice(0,10);
+ let local=new Date(now.getTime()-now.getTimezoneOffset()*60000).toISOString().slice(0,10);
  put("dailyDate",local);
  put("monthDate",local.slice(0,7));
  put("yearDate",now.getFullYear());
