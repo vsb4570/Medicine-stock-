@@ -3,118 +3,181 @@
 <html lang="bn">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Mohammad Pharmacy</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>মোহাম্মদ ফার্মেসি</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;background:#f1f5f9;color:#172033;font-family:Arial,"Noto Sans Bengali",sans-serif}
-header{background:#087b48;color:white;text-align:center;padding:17px 10px}
-header h2{margin:0 0 5px}
-nav{display:flex;position:sticky;top:0;background:#075c39;z-index:5}
-nav button{width:50%;padding:14px 5px;border:0;background:none;color:white;font-size:16px}
-nav button.active{background:#10a66a}
-main{max-width:1200px;margin:auto;padding:12px}
-.page{display:none}
-.page.active{display:block}
-.card{background:white;padding:15px;margin-bottom:13px;border-radius:10px;box-shadow:0 2px 7px #0001}
-h3{color:#087b48;margin-top:0}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:9px}
-label{font-size:14px;font-weight:bold}
-input,select{width:100%;padding:11px;margin:5px 0 12px;border:1px solid #cbd5e1;border-radius:7px;font-size:15px}
-.action{background:#087b48;color:white;border:0;padding:11px 15px;border-radius:7px;margin:3px}
-.danger{background:#dc2626}
-.secondary{background:#475569}
-.stat{background:#e5f7ed;padding:13px;border-radius:8px;text-align:center}
-.stat b{display:block;color:#087b48;font-size:19px;margin-top:7px}
-.table-wrap{overflow-x:auto}
-table{width:100%;border-collapse:collapse;min-width:850px}
-th,td{border:1px solid #e2e8f0;padding:8px;text-align:center;font-size:13px}
-th{background:#e5f7ed}
-.note{background:#fff7ed;padding:10px;border-radius:7px;font-size:13px}
-.total{font-weight:bold;color:#087b48;font-size:19px}
-hr{border:0;border-top:1px solid #ddd;margin:16px 0}
+body{margin:0;font-family:Arial,sans-serif;background:#f2f5f8;color:#222}
+header{background:#087b55;color:white;padding:17px;text-align:center}
+header h2{margin:0}
+nav{display:flex;background:#075b42}
+nav button{flex:1;border:0;padding:14px 5px;background:transparent;color:white;font-size:16px}
+nav button.active{background:#fff;color:#075b42;font-weight:bold}
+.container{padding:12px;max-width:1000px;margin:auto}
+.section{display:none}
+.section.active{display:block}
+.card{background:white;padding:14px;border-radius:10px;margin:12px 0;box-shadow:0 2px 7px #0001}
+h3{margin-top:0;color:#087b55}
+label{display:block;font-weight:bold;margin:10px 0 5px}
+input,select{width:100%;padding:11px;border:1px solid #bbb;border-radius:6px;font-size:15px;background:white}
+button{cursor:pointer}
+.btn{border:0;border-radius:6px;padding:11px 15px;background:#087b55;color:white;font-size:15px;margin:5px 2px}
+.btn.red{background:#c0392b}
+.btn.blue{background:#2471a3}
+.btn.gray{background:#555}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.result{background:#e8f6ef;padding:10px;border-radius:6px;margin-top:10px}
+table{width:100%;border-collapse:collapse;background:white;margin-top:10px;min-width:650px}
+th,td{border:1px solid #ddd;padding:8px;text-align:center;font-size:13px}
+th{background:#087b55;color:white}
+.tablewrap{overflow-x:auto}
+.small{font-size:13px;color:#555}
+hr{border:0;border-top:1px solid #ddd;margin:15px 0}
+@media(max-width:500px){.grid{grid-template-columns:1fr}nav button{font-size:14px}}
 </style>
 </head>
 <body>
 
 <header>
-<h2>Mohammad Pharmacy</h2>
-<p>491/1 East Kazipara, Kafrul, Mirpur, Dhaka</p>
-<p>মোবাইল: 01325682483</p>
+<h2>মোহাম্মদ ফার্মেসি</h2>
+<p style="margin:5px 0 0">স্টক ও দোকান হিসাব</p>
 </header>
 
 <nav>
-<button id="stockTab" class="active" onclick="showPage('stock')">স্টক হিসাব</button>
-<button id="accountsTab" onclick="showPage('accounts')">দোকান হিসাব</button>
+<button class="active" onclick="showTab('stock',this)">স্টক হিসাব</button>
+<button onclick="showTab('shop',this)">দোকান হিসাব</button>
 </nav>
 
-<main>
+<div class="container">
 
-<section id="stock" class="page active">
+<!-- স্টক হিসাব -->
+<section id="stock" class="section active">
+
 <div class="card">
-<h3>ঔষধের স্টক যোগ / সম্পাদনা</h3>
+<h3>কোম্পানির নাম</h3>
+
+<label>পুরোনো কোম্পানির নাম নির্বাচন করুন</label>
+<select id="companySelect">
+<option value="">-- কোম্পানি নির্বাচন করুন --</option>
+</select>
+
+<label>নতুন কোম্পানির নাম লিখুন</label>
+<input id="newCompany" placeholder="নতুন কোম্পানির নাম">
+
+<button class="btn" onclick="addCompany()">নতুন কোম্পানি যোগ করুন</button>
+
+<hr>
+
+<label>নাম পরিবর্তনের জন্য পুরোনো কোম্পানি</label>
+<select id="renameSelect">
+<option value="">-- কোম্পানি নির্বাচন করুন --</option>
+</select>
+
+<label>নতুন নাম</label>
+<input id="renameInput" placeholder="নতুন কোম্পানির নাম লিখুন">
+<button class="btn blue" onclick="renameCompany()">কোম্পানির নাম পরিবর্তন করুন</button>
+</div>
+
+<div class="card">
+<h3>ঔষধের তথ্য</h3>
+
+<input type="hidden" id="editId">
 
 <label>কোম্পানির নাম</label>
-<input id="company" placeholder="কোম্পানির নাম">
+<select id="productCompany">
+<option value="">-- পুরোনো কোম্পানি নির্বাচন করুন --</option>
+</select>
 
 <label>ঔষধের নাম</label>
-<input id="pname" placeholder="ঔষধের নাম">
+<input id="medicineName" placeholder="ঔষধের নাম">
 
 <div class="grid">
-<div><label>বক্স</label><input id="boxes" type="number" min="0" value="0"></div>
-<div><label>প্রতি বক্সে পাতা</label><input id="strips" type="number" min="1" value="1"></div>
-<div><label>পাতা</label><input id="extraStrips" type="number" min="0" value="0"></div>
-<div><label>প্রতি পাতায় পিস</label><input id="pieces" type="number" min="1" value="1"></div>
-<div><label>পিস</label><input id="extraPieces" type="number" min="0" value="0"></div>
+<div>
+<label>বক্স</label>
+<input type="number" id="boxes" min="0" value="0">
+</div>
+<div>
+<label>প্রতি বক্সে পাতা</label>
+<input type="number" id="stripsPerBox" min="1" value="10">
+</div>
+<div>
+<label>পাতা</label>
+<input type="number" id="strips" min="0" value="0">
+</div>
+<div>
+<label>প্রতি পাতায় পিস</label>
+<input type="number" id="piecesPerStrip" min="1" value="10">
+</div>
+<div>
+<label>পিস</label>
+<input type="number" id="pieces" min="0" value="0">
+</div>
 </div>
 
 <hr>
 <h3>বিক্রয়মূল্য</h3>
+<label>বক্স বিক্রয়মূল্য</label>
+<input type="number" id="sellBox" min="0" step="any" placeholder="বক্স বিক্রয়মূল্য">
+
 <div class="grid">
-<div><label>বক্স বিক্রয়মূল্য</label><input id="sellBox" type="number" min="0" step="0.01" value="0"></div>
-<div><label>পাতা বিক্রয়মূল্য</label><input id="sellStrip" type="number" min="0" step="0.01" value="0"></div>
-<div><label>পিস বিক্রয়মূল্য</label><input id="sellPiece" type="number" min="0" step="0.01" value="0"></div>
+<div>
+<label>পাতা বিক্রয়মূল্য</label>
+<input id="sellStrip" readonly>
+</div>
+<div>
+<label>পিস বিক্রয়মূল্য</label>
+<input id="sellPiece" readonly>
+</div>
 </div>
 
+<hr>
 <h3>ক্রয়মূল্য</h3>
+<label>ডিসকাউন্ট রেট (%)</label>
+<input type="number" id="discountRate" min="0" max="100" step="any" value="0">
+
 <div class="grid">
-<div><label>বক্স ক্রয়মূল্য</label><input id="buyBox" type="number" min="0" step="0.01" value="0"></div>
-<div><label>পাতা ক্রয়মূল্য</label><input id="buyStrip" type="number" min="0" step="0.01" value="0"></div>
-<div><label>পিস ক্রয়মূল্য</label><input id="buyPiece" type="number" min="0" step="0.01" value="0"></div>
+<div>
+<label>বক্স ক্রয়মূল্য</label>
+<input id="buyBox" readonly>
+</div>
+<div>
+<label>পাতা ক্রয়মূল্য</label>
+<input id="buyStrip" readonly>
+</div>
+<div>
+<label>পিস ক্রয়মূল্য</label>
+<input id="buyPiece" readonly>
+</div>
 </div>
 
-<div class="note">
-<strong>সর্বমোট হিসাব</strong>
-<p>মোট পিস: <b id="previewQty">0</b></p>
-<p>সর্বমোট ক্রয়মূল্য: <b id="previewBuy">৳ 0</b></p>
-<p>সর্বমোট বিক্রয়মূল্য: <b id="previewSell">৳ 0</b></p>
+<div class="result">
+<p>সর্বমোট ক্রয়মূল্য: <b id="totalBuy">0.00</b> টাকা</p>
+<p>সর্বমোট বিক্রয়মূল্য: <b id="totalSell">0.00</b> টাকা</p>
 </div>
 
-<button class="action" onclick="saveProduct()">স্টক সংরক্ষণ করুন</button>
-<button class="action secondary" onclick="clearForm()">ফর্ম পরিষ্কার</button>
-<input type="hidden" id="editId">
+<button class="btn" onclick="saveProduct()">ঔষধ সংরক্ষণ করুন</button>
+<button class="btn gray" onclick="clearProduct()">নতুন এন্ট্রি</button>
 </div>
 
 <div class="card">
 <h3>ঔষধের তালিকা</h3>
-<input id="search" placeholder="ঔষধ বা কোম্পানি খুঁজুন" oninput="renderStock()">
-<div class="table-wrap">
+<input id="searchMedicine" placeholder="ঔষধ বা কোম্পানির নাম খুঁজুন" oninput="renderProducts()">
+<div class="tablewrap">
 <table>
 <thead>
 <tr>
 <th>কোম্পানি</th><th>ঔষধ</th><th>বক্স</th><th>পাতা</th><th>পিস</th>
-<th>মোট পিস</th><th>বক্স ক্রয়</th><th>পাতা ক্রয়</th><th>পিস ক্রয়</th>
-<th>বক্স বিক্রয়</th><th>পাতা বিক্রয়</th><th>পিস বিক্রয়</th>
-<th>মোট ক্রয়</th><th>মোট বিক্রয়</th><th>কাজ</th>
+<th>বক্স ক্রয়</th><th>বক্স বিক্রয়</th><th>মোট ক্রয়</th><th>মোট বিক্রয়</th><th>কাজ</th>
 </tr>
 </thead>
-<tbody id="stockList"></tbody>
+<tbody id="productRows"></tbody>
 </table>
 </div>
 </div>
 </section>
 
-<section id="accounts" class="page">
+<!-- দোকান হিসাব -->
+<section id="shop" class="section">
 
 <div class="card">
 <h3>দৈনিক হিসাব</h3>
@@ -122,394 +185,477 @@ hr{border:0;border-top:1px solid #ddd;margin:16px 0}
 <input type="date" id="dailyDate">
 
 <div class="grid">
-<div><label>দৈনিক শেষ টাকা</label><input type="number" id="dailyEnd" value="0"></div>
-<div><label>বিনিয়োগ</label><input type="number" id="dailyInvest" value="0"></div>
-<div><label>ক্রয়</label><input type="number" id="dailyPurchase" value="0"></div>
-<div><label>দোকান খরচ</label><input type="number" id="dailyShopExpense" value="0"></div>
-<div><label>বাসা খরচ</label><input type="number" id="dailyHomeExpense" value="0"></div>
-<div><label>আগের দিনের টাকা</label><input type="number" id="dailyPrevious" value="0"></div>
+<div><label>দৈনিক শেষ টাকা</label><input type="number" id="dEnd" value="0"></div>
+<div><label>বিনিয়োগ</label><input type="number" id="dInvest" value="0"></div>
+<div><label>ক্রয়</label><input type="number" id="dPurchase" value="0"></div>
+<div><label>দোকান খরচ</label><input type="number" id="dShopCost" value="0"></div>
+<div><label>বাসা খরচ</label><input type="number" id="dHomeCost" value="0"></div>
+<div><label>আগের দিনের টাকা</label><input type="number" id="dPrevious" value="0"></div>
 </div>
 
-<p>বিক্রয় = দৈনিক শেষ টাকা − বিনিয়োগ + ক্রয় + দোকান খরচ + বাসা খরচ − আগের দিনের টাকা</p>
-<p class="total">আজকের বিক্রয়: <span id="dailySales">৳ 0</span></p>
-<button class="action" onclick="saveDaily()">দৈনিক হিসাব সংরক্ষণ</button>
-
-<div class="table-wrap">
+<div class="result">
+দৈনিক বিক্রয় =
+দৈনিক শেষ টাকা − বিনিয়োগ + ক্রয় + দোকান খরচ + বাসা খরচ − আগের দিনের টাকা
+<h3 id="dailySale">0.00 টাকা</h3>
+</div>
+<button class="btn" onclick="saveDaily()">দৈনিক হিসাব সংরক্ষণ</button>
+<div class="tablewrap">
 <table>
-<thead><tr><th>তারিখ</th><th>শেষ টাকা</th><th>বিনিয়োগ</th><th>ক্রয়</th><th>দোকান খরচ</th><th>বাসা খরচ</th><th>আগের টাকা</th><th>বিক্রয়</th><th>কাজ</th></tr></thead>
-<tbody id="dailyList"></tbody>
+<thead><tr><th>তারিখ</th><th>বিক্রয়</th><th>শেষ টাকা</th><th>কাজ</th></tr></thead>
+<tbody id="dailyRows"></tbody>
 </table>
 </div>
 </div>
 
 <div class="card">
 <h3>মাসিক হিসাব</h3>
-<label>মাস নির্বাচন</label>
+<label>মাস নির্বাচন করুন</label>
 <input type="month" id="monthDate">
 
 <div class="grid">
-<div><label>মাসের শেষে টাকা</label><input id="monthEnd" type="number" value="0"></div>
-<div><label>মাসের শুরু টাকা</label><input id="monthStart" type="number" value="0"></div>
-<div><label>বিক্রয়</label><input id="monthSales" type="number" value="0"></div>
-<div><label>ক্রয়</label><input id="monthPurchase" type="number" value="0"></div>
-<div><label>দোকান খরচ</label><input id="monthShopExpense" type="number" value="0"></div>
-<div><label>বাসায় খরচ</label><input id="monthHomeExpense" type="number" value="0"></div>
-<div><label>বিনিয়োগ</label><input id="monthInvest" type="number" value="0"></div>
+<div><label>বিক্রয়</label><input type="number" id="mSale" value="0"></div>
+<div><label>ক্রয়</label><input type="number" id="mPurchase" value="0"></div>
+<div><label>দোকান খরচ</label><input type="number" id="mShopCost" value="0"></div>
+<div><label>মাসের শেষে টাকা</label><input type="number" id="mEnd" value="0"></div>
+<div><label>মাসের শুরু টাকা</label><input type="number" id="mStart" value="0"></div>
+<div><label>বাসায় খরচ</label><input type="number" id="mHome" value="0"></div>
+<div><label>বিনিয়োগ</label><input type="number" id="mInvest" value="0"></div>
 </div>
 
-<p class="total">প্রকৃত জমা টাকা: <span id="monthDeposit">৳ 0</span></p>
-<p class="small">সূত্র: শেষের টাকা − শুরুর টাকা − (বাসার খরচ − বিনিয়োগ)</p>
-<button class="action" onclick="saveMonth()">মাসিক হিসাব সংরক্ষণ</button>
-
-<div class="table-wrap">
-<table>
-<thead><tr><th>মাস</th><th>বিক্রয়</th><th>ক্রয়</th><th>দোকান খরচ</th><th>শেষ টাকা</th><th>শুরু টাকা</th><th>বাসা খরচ</th><th>বিনিয়োগ</th><th>প্রকৃত জমা</th><th>কাজ</th></tr></thead>
-<tbody id="monthList"></tbody>
-</table>
+<div class="result">
+প্রকৃত জমা টাকা = শেষের টাকা − শুরুর টাকা − (বাসার খরচ − বিনিয়োগ)
+<h3 id="monthDeposit">0.00 টাকা</h3>
+</div>
+<button class="btn" onclick="savePeriod('month')">মাসিক হিসাব সংরক্ষণ</button>
+<div class="tablewrap">
+<table><thead><tr><th>মাস</th><th>বিক্রয়</th><th>প্রকৃত জমা</th><th>কাজ</th></tr></thead>
+<tbody id="monthRows"></tbody></table>
 </div>
 </div>
 
 <div class="card">
 <h3>বার্ষিক হিসাব</h3>
-<label>বছর</label>
-<input type="number" id="yearDate" min="2000" max="2100">
+<label>বছর নির্বাচন করুন</label>
+<input type="number" id="yearDate" min="2000" max="2200">
 
 <div class="grid">
-<div><label>বছরের শেষে টাকা</label><input id="yearEnd" type="number" value="0"></div>
-<div><label>বছরের শুরু টাকা</label><input id="yearStart" type="number" value="0"></div>
-<div><label>বিক্রয়</label><input id="yearSales" type="number" value="0"></div>
-<div><label>ক্রয়</label><input id="yearPurchase" type="number" value="0"></div>
-<div><label>দোকান খরচ</label><input id="yearShopExpense" type="number" value="0"></div>
-<div><label>বাসায় খরচ</label><input id="yearHomeExpense" type="number" value="0"></div>
-<div><label>বিনিয়োগ</label><input id="yearInvest" type="number" value="0"></div>
+<div><label>বিক্রয়</label><input type="number" id="ySale" value="0"></div>
+<div><label>ক্রয়</label><input type="number" id="yPurchase" value="0"></div>
+<div><label>দোকান খরচ</label><input type="number" id="yShopCost" value="0"></div>
+<div><label>বছরের শেষে টাকা</label><input type="number" id="yEnd" value="0"></div>
+<div><label>বছরের শুরু টাকা</label><input type="number" id="yStart" value="0"></div>
+<div><label>বাসায় খরচ</label><input type="number" id="yHome" value="0"></div>
+<div><label>বিনিয়োগ</label><input type="number" id="yInvest" value="0"></div>
 </div>
 
-<p class="total">প্রকৃত জমা টাকা: <span id="yearDeposit">৳ 0</span></p>
-<button class="action" onclick="saveYear()">বার্ষিক হিসাব সংরক্ষণ</button>
-
-<div class="table-wrap">
-<table>
-<thead><tr><th>বছর</th><th>বিক্রয়</th><th>ক্রয়</th><th>দোকান খরচ</th><th>শেষ টাকা</th><th>শুরু টাকা</th><th>বাসা খরচ</th><th>বিনিয়োগ</th><th>প্রকৃত জমা</th><th>কাজ</th></tr></thead>
-<tbody id="yearList"></tbody>
-</table>
+<div class="result">
+প্রকৃত জমা টাকা = শেষের টাকা − শুরুর টাকা − (বাসার খরচ − বিনিয়োগ)
+<h3 id="yearDeposit">0.00 টাকা</h3>
+</div>
+<button class="btn" onclick="savePeriod('year')">বার্ষিক হিসাব সংরক্ষণ</button>
+<div class="tablewrap">
+<table><thead><tr><th>বছর</th><th>বিক্রয়</th><th>প্রকৃত জমা</th><th>কাজ</th></tr></thead>
+<tbody id="yearRows"></tbody></table>
 </div>
 </div>
 
 </section>
-</main>
+</div>
 
 <script>
 const KEY="mohammadPharmacyCompleteV3";
 
-let data={
-products:[],purchases:[],sales:[],accounts:[],companies:[],
-dailyAccounts:[],monthlyAccounts:[],yearlyAccounts:[]
-};
-
-function loadData(){
+let data;
 try{
-let old=JSON.parse(localStorage.getItem(KEY)||"{}");
-data={...data,...old};
-}catch(e){alert("পুরোনো ডাটা পড়তে সমস্যা হয়েছে");}
-["products","purchases","sales","accounts","companies","dailyAccounts","monthlyAccounts","yearlyAccounts"].forEach(k=>{
-if(!Array.isArray(data[k]))data[k]=[];
+ data=JSON.parse(localStorage.getItem(KEY))||{};
+}catch(e){data={};}
+
+if(!Array.isArray(data.products))data.products=[];
+if(!Array.isArray(data.companies))data.companies=[];
+if(!Array.isArray(data.dailyAccounts))data.dailyAccounts=[];
+if(!Array.isArray(data.monthlyAccounts))data.monthlyAccounts=[];
+if(!Array.isArray(data.yearlyAccounts))data.yearlyAccounts=[];
+
+// পুরোনো কোম্পানির নাম ও পণ্যের তথ্য সংরক্ষণ
+let companyNames=[];
+data.companies.forEach(c=>{
+ let n=typeof c==="string"?c:c&&c.name;
+ if(n&&!companyNames.includes(n))companyNames.push(n);
 });
 data.products.forEach(p=>{
-if(p.extraDiscount===undefined)p.extraDiscount=0;
+ if(p.company&&!companyNames.includes(p.company))companyNames.push(p.company);
 });
-}
+data.companies=companyNames;
 
-function saveData(){
-localStorage.setItem(KEY,JSON.stringify(data));
-renderAll();
-}
+data.products.forEach(p=>{
+ if(p.sellBox===undefined)p.sellBox=Number(p.sell||0);
+ if(p.discountRate===undefined){
+  let oldBuy=Number(p.buy||0);
+  let oldSell=Number(p.sell||p.sellBox||0);
+  p.discountRate=oldSell>0&&oldBuy>0?
+   Math.max(0,Math.min(100,100*(oldSell-oldBuy)/oldSell)):0;
+ }
+});
 
-function num(id){
-return Number(document.getElementById(id).value)||0;
+function persist(){
+ localStorage.setItem(KEY,JSON.stringify(data));
 }
 
 function money(n){
-return "৳ "+Number(n||0).toLocaleString("en-BD",{maximumFractionDigits:2});
+ return (Number(n)||0).toFixed(2);
+}
+function num(id){
+ return Number(document.getElementById(id).value)||0;
+}
+function set(id,value){
+ document.getElementById(id).value=value??0;
 }
 
-function esc(v){
-return String(v??"").replace(/[&<>"']/g,c=>({
-"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
-}[c]));
+function showTab(id,btn){
+ document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
+ document.getElementById(id).classList.add("active");
+ document.querySelectorAll("nav button").forEach(b=>b.classList.remove("active"));
+ btn.classList.add("active");
 }
 
-function showPage(id){
-document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));
-document.getElementById(id).classList.add("active");
-document.getElementById("stockTab").classList.toggle("active",id==="stock");
-document.getElementById("accountsTab").classList.toggle("active",id==="accounts");
-renderAll();
+function renderCompanies(){
+ const selects=["companySelect","renameSelect","productCompany"];
+ selects.forEach(id=>{
+  const el=document.getElementById(id);
+  const old=el.value;
+  el.innerHTML='<option value="">-- কোম্পানি নির্বাচন করুন --</option>';
+  data.companies.forEach(name=>{
+   let op=document.createElement("option");
+   op.value=name;
+   op.textContent=name;
+   el.appendChild(op);
+  });
+  if(data.companies.includes(old))el.value=old;
+ });
 }
 
-function boxSize(p){
-return Math.max(1,(Number(p.strips)||1)*(Number(p.pieces)||1));
+function addCompany(){
+ const name=document.getElementById("newCompany").value.trim();
+ if(!name)return alert("কোম্পানির নাম লিখুন");
+ if(data.companies.includes(name))return alert("এই কোম্পানির নাম আগে থেকেই আছে");
+ data.companies.push(name);
+ document.getElementById("newCompany").value="";
+ persist();
+ renderCompanies();
+ document.getElementById("companySelect").value=name;
+ document.getElementById("productCompany").value=name;
+ alert("নতুন কোম্পানি যোগ হয়েছে");
 }
 
-function totalPieces(p){
-return (Number(p.boxes)||0)*boxSize(p)
-+(Number(p.extraStrips)||0)*(Number(p.pieces)||1)
-+(Number(p.extraPieces)||0);
+function renameCompany(){
+ const old=document.getElementById("renameSelect").value;
+ const name=document.getElementById("renameInput").value.trim();
+ if(!old)return alert("পুরোনো কোম্পানি নির্বাচন করুন");
+ if(!name)return alert("নতুন নাম লিখুন");
+ if(name!==old&&data.companies.includes(name))return alert("এই নাম আগে থেকেই আছে");
+
+ data.companies=data.companies.map(c=>c===old?name:c);
+ data.products.forEach(p=>{
+  if(p.company===old)p.company=name;
+ });
+ document.getElementById("renameInput").value="";
+ persist();
+ renderCompanies();
+ renderProducts();
+ alert("কোম্পানির নাম পরিবর্তন হয়েছে");
 }
 
-function unitBuy(p){
-let size=boxSize(p);
-return (Number(p.buy)||0)/size;
+function calculatePrices(){
+ let sell=num("sellBox");
+ let perBox=num("stripsPerBox");
+ let perStrip=num("piecesPerStrip");
+ let discount=num("discountRate");
+
+ if(discount<0||discount>100){
+  document.getElementById("discountRate").setCustomValidity("ডিসকাউন্ট ০ থেকে ১০০ এর মধ্যে দিন");
+  return;
+ }
+ document.getElementById("discountRate").setCustomValidity("");
+
+ let sellStrip=perBox>0?sell/perBox:0;
+ let sellPiece=perStrip>0?sellStrip/perStrip:0;
+ let buyBox=sell-(sell*discount/100);
+ let buyStrip=perBox>0?buyBox/perBox:0;
+ let buyPiece=perStrip>0?buyStrip/perStrip:0;
+
+ set("sellStrip",money(sellStrip));
+ set("sellPiece",money(sellPiece));
+ set("buyBox",money(buyBox));
+ set("buyStrip",money(buyStrip));
+ set("buyPiece",money(buyPiece));
+
+ let totalStrips=num("boxes")*perBox+num("strips");
+ let totalPieces=totalStrips*perStrip+num("pieces");
+ let totalSell=num("boxes")*sell+
+  num("strips")*sellStrip+num("pieces")*sellPiece;
+ let totalBuy=num("boxes")*buyBox+
+  num("strips")*buyStrip+num("pieces")*buyPiece;
+
+ setText("totalBuy",money(totalBuy));
+ setText("totalSell",money(totalSell));
 }
 
-function unitSell(p){
-let size=boxSize(p);
-return (Number(p.sell)||0)/size;
+function setText(id,value){
+ document.getElementById(id).textContent=value;
 }
 
-function stockBuy(p){
-return totalPieces(p)*unitBuy(p);
-}
+["sellBox","stripsPerBox","piecesPerStrip","discountRate","boxes","strips","pieces"]
+.forEach(id=>document.getElementById(id).addEventListener("input",calculatePrices));
 
-function stockSell(p){
-return totalPieces(p)*unitSell(p);
-}
-
-function preview(){
-let p={
-boxes:num("boxes"),strips:num("strips"),pieces:num("pieces"),
-extraStrips:num("extraStrips"),extraPieces:num("extraPieces"),
-buy:num("buyBox"),sell:num("sellBox")
-};
-let qty=totalPieces(p);
-document.getElementById("previewQty").innerText=qty;
-document.getElementById("previewBuy").innerText=money(qty*unitBuy(p));
-document.getElementById("previewSell").innerText=money(qty*unitSell(p));
+function clearProduct(){
+ ["editId","medicineName","sellBox"].forEach(id=>set(id,""));
+ ["boxes","strips","pieces"].forEach(id=>set(id,0));
+ set("stripsPerBox",10);
+ set("piecesPerStrip",10);
+ set("discountRate",0);
+ document.getElementById("productCompany").value="";
+ calculatePrices();
 }
 
 function saveProduct(){
-let name=document.getElementById("pname").value.trim();
-if(!name){alert("ঔষধের নাম লিখুন");return;}
-let strips=num("strips"),pieces=num("pieces");
-if(strips<=0||pieces<=0){alert("প্রতি বক্সে পাতা ও প্রতি পাতায় পিস ১ বা বেশি হতে হবে");return;}
+ let company=document.getElementById("productCompany").value;
+ let name=document.getElementById("medicineName").value.trim();
+ if(!company)return alert("কোম্পানির নাম নির্বাচন করুন");
+ if(!name)return alert("ঔষধের নাম লিখুন");
 
-let id=document.getElementById("editId").value;
-let old=id?data.products.find(x=>x.id===id):null;
-let p={
-id:id||String(Date.now()),
-name,
-company:document.getElementById("company").value.trim(),
-boxes:num("boxes"),strips,pieces,
-extraStrips:num("extraStrips"),extraPieces:num("extraPieces"),
-buy:num("buyBox"),sell:num("sellBox"),
-buyStrip:num("buyStrip"),buyPiece:num("buyPiece"),
-sellStrip:num("sellStrip"),sellPiece:num("sellPiece"),
-extraDiscount:old?.extraDiscount||0
-};
-if(old)Object.assign(old,p);
-else data.products.push(p);
-clearForm();
-saveData();
-alert("স্টক সংরক্ষণ হয়েছে");
+ let sell=num("sellBox"),perBox=num("stripsPerBox"),perStrip=num("piecesPerStrip");
+ let discount=num("discountRate");
+ if(perBox<=0||perStrip<=0)return alert("প্রতি বক্সে পাতা ও প্রতি পাতায় পিস সঠিকভাবে লিখুন");
+ if(discount<0||discount>100)return alert("ডিসকাউন্ট ০ থেকে ১০০ এর মধ্যে দিন");
+
+ let buy=sell*(1-discount/100);
+ let totalStrips=num("boxes")*perBox+num("strips");
+ let totalPieces=totalStrips*perStrip+num("pieces");
+
+ let p={
+  id:document.getElementById("editId").value||String(Date.now()),
+  company,name,
+  boxes:num("boxes"),strips:num("strips"),pieces:num("pieces"),
+  stripsPerBox:perBox,piecesPerStrip:perStrip,
+  sellBox:sell,sellStrip:sell/perBox,sellPiece:sell/perBox/perStrip,
+  discountRate:discount,
+  buyBox:buy,buyStrip:buy/perBox,buyPiece:buy/perBox/perStrip,
+  totalBuy:num("boxes")*buy+num("strips")*(buy/perBox)+num("pieces")*(buy/perBox/perStrip),
+  totalSell:num("boxes")*sell+num("strips")*(sell/perBox)+num("pieces")*(sell/perBox/perStrip)
+ };
+
+ let index=data.products.findIndex(x=>String(x.id)===String(p.id));
+ if(index>=0){
+  data.products[index]={...data.products[index],...p};
+ }else{
+  data.products.push(p);
+ }
+ persist();
+ renderProducts();
+ clearProduct();
+ alert("ঔষধের তথ্য সংরক্ষণ হয়েছে");
 }
 
-function clearForm(){
-["company","pname","editId"].forEach(x=>document.getElementById(x).value="");
-["boxes","extraStrips","extraPieces","buyBox","sellBox","buyStrip","buyPiece","sellStrip","sellPiece"].forEach(x=>document.getElementById(x).value=0);
-document.getElementById("strips").value=1;
-document.getElementById("pieces").value=1;
-preview();
+function renderProducts(){
+ let q=document.getElementById("searchMedicine").value.toLowerCase();
+ let rows=document.getElementById("productRows");
+ rows.innerHTML="";
+ data.products.filter(p=>
+  (p.name||"").toLowerCase().includes(q)||
+  (p.company||"").toLowerCase().includes(q)
+ ).forEach(p=>{
+  let sell=Number(p.sellBox??p.sell??0);
+  let perBox=Number(p.stripsPerBox||10);
+  let perStrip=Number(p.piecesPerStrip||10);
+  let discount=Number(p.discountRate||0);
+  let buy=sell*(1-discount/100);
+  let totalBuy=Number(p.totalBuy??(
+   Number(p.boxes||0)*buy+
+   Number(p.strips||0)*buy/perBox+
+   Number(p.pieces||0)*buy/perBox/perStrip
+  ));
+  let totalSell=Number(p.totalSell??(
+   Number(p.boxes||0)*sell+
+   Number(p.strips||0)*sell/perBox+
+   Number(p.pieces||0)*sell/perBox/perStrip
+  ));
+
+  let tr=document.createElement("tr");
+  let values=[
+   p.company,p.name,p.boxes||0,p.strips||0,p.pieces||0,
+   money(buy),money(sell),money(totalBuy),money(totalSell)
+  ];
+  values.forEach(v=>{
+   let td=document.createElement("td");
+   td.textContent=v??"";
+   tr.appendChild(td);
+  });
+
+  let td=document.createElement("td");
+  let edit=document.createElement("button");
+  edit.className="btn blue";
+  edit.textContent="সম্পাদনা";
+  edit.onclick=()=>editProduct(p.id);
+  let del=document.createElement("button");
+  del.className="btn red";
+  del.textContent="মুছুন";
+  del.onclick=()=>deleteProduct(p.id);
+  td.append(edit,del);
+  tr.appendChild(td);
+  rows.appendChild(tr);
+ });
 }
 
 function editProduct(id){
-let p=data.products.find(x=>x.id===id);
-if(!p)return;
-document.getElementById("editId").value=p.id;
-document.getElementById("company").value=p.company||"";
-document.getElementById("pname").value=p.name||"";
-["boxes","strips","pieces","extraStrips","extraPieces"].forEach(k=>document.getElementById(k).value=p[k]||0);
-document.getElementById("buyBox").value=p.buy||0;
-document.getElementById("sellBox").value=p.sell||0;
-document.getElementById("buyStrip").value=p.buyStrip||0;
-document.getElementById("buyPiece").value=p.buyPiece||0;
-document.getElementById("sellStrip").value=p.sellStrip||0;
-document.getElementById("sellPiece").value=p.sellPiece||0;
-showPage("stock");
-preview();
-window.scrollTo(0,0);
+ let p=data.products.find(x=>String(x.id)===String(id));
+ if(!p)return;
+ set("editId",p.id);
+ set("medicineName",p.name);
+ document.getElementById("productCompany").value=p.company||"";
+ set("boxes",p.boxes);
+ set("strips",p.strips);
+ set("pieces",p.pieces);
+ set("stripsPerBox",p.stripsPerBox||10);
+ set("piecesPerStrip",p.piecesPerStrip||10);
+ set("sellBox",p.sellBox??p.sell??0);
+ set("discountRate",p.discountRate||0);
+ calculatePrices();
+ document.getElementById("stock").scrollIntoView({behavior:"smooth"});
 }
 
 function deleteProduct(id){
-if(!confirm("এই ঔষধ মুছে ফেলবেন?"))return;
-data.products=data.products.filter(p=>p.id!==id);
-saveData();
+ if(!confirm("এই ঔষধটি মুছে ফেলবেন?"))return;
+ data.products=data.products.filter(p=>String(p.id)!==String(id));
+ persist();
+ renderProducts();
 }
 
-function renderStock(){
-let q=(document.getElementById("search").value||"").toLowerCase();
-let list=data.products.filter(p=>(p.name||"").toLowerCase().includes(q)||(p.company||"").toLowerCase().includes(q));
-document.getElementById("stockList").innerHTML=list.map(p=>{
-let strips=p.extraStrips||0,pieces=p.extraPieces||0;
-return `<tr>
-<td>${esc(p.company)}</td><td>${esc(p.name)}</td>
-<td>${p.boxes||0}</td><td>${strips}</td><td>${pieces}</td>
-<td>${totalPieces(p)}</td>
-<td>${money(p.buy)}</td><td>${money(p.buyStrip||unitBuy(p)*(p.pieces||1))}</td>
-<td>${money(p.buyPiece||unitBuy(p))}</td>
-<td>${money(p.sell)}</td><td>${money(p.sellStrip||unitSell(p)*(p.pieces||1))}</td>
-<td>${money(p.sellPiece||unitSell(p))}</td>
-<td>${money(stockBuy(p))}</td><td>${money(stockSell(p))}</td>
-<td><button class="action" onclick="editProduct('${p.id}')">Edit</button>
-<button class="action danger" onclick="deleteProduct('${p.id}')">মুছুন</button></td>
-</tr>`;
-}).join("");
+// দৈনিক হিসাব
+function dailyCalculation(){
+ let sale=num("dEnd")-num("dInvest")+num("dPurchase")+
+ num("dShopCost")+num("dHomeCost")-num("dPrevious");
+ setText("dailySale",money(sale)+" টাকা");
+ return sale;
 }
 
-/* দৈনিক হিসাব */
-function dailyValue(){
-return num("dailyEnd")-num("dailyInvest")+num("dailyPurchase")
-+num("dailyShopExpense")+num("dailyHomeExpense")-num("dailyPrevious");
-}
-
-function updateDaily(){
-document.getElementById("dailySales").innerText=money(dailyValue());
-}
+["dEnd","dInvest","dPurchase","dShopCost","dHomeCost","dPrevious"]
+.forEach(id=>document.getElementById(id).addEventListener("input",dailyCalculation));
 
 function saveDaily(){
-let date=document.getElementById("dailyDate").value;
-if(!date){alert("তারিখ নির্বাচন করুন");return;}
-let obj={
-date,end:num("dailyEnd"),invest:num("dailyInvest"),
-purchase:num("dailyPurchase"),shopExpense:num("dailyShopExpense"),
-homeExpense:num("dailyHomeExpense"),previous:num("dailyPrevious"),
-sales:dailyValue()
-};
-let i=data.dailyAccounts.findIndex(x=>x.date===date);
-if(i>=0)data.dailyAccounts[i]=obj;
-else data.dailyAccounts.push(obj);
-saveData();
-alert("দৈনিক হিসাব সংরক্ষণ হয়েছে");
+ let date=document.getElementById("dailyDate").value;
+ if(!date)return alert("তারিখ নির্বাচন করুন");
+ let record={
+  date,
+  end:num("dEnd"),invest:num("dInvest"),purchase:num("dPurchase"),
+  shopCost:num("dShopCost"),homeCost:num("dHomeCost"),
+  previous:num("dPrevious"),sale:dailyCalculation()
+ };
+ let i=data.dailyAccounts.findIndex(x=>x.date===date);
+ if(i>=0)data.dailyAccounts[i]=record;
+ else data.dailyAccounts.push(record);
+ persist();
+ renderAccounts();
+ alert("দৈনিক হিসাব সংরক্ষণ হয়েছে");
 }
 
-function deleteDaily(date){
-if(!confirm("এই হিসাব মুছবেন?"))return;
-data.dailyAccounts=data.dailyAccounts.filter(x=>x.date!==date);
-saveData();
+// মাসিক ও বার্ষিক হিসাব
+function periodCalculation(type){
+ let prefix=type==="month"?"m":"y";
+ let deposit=num(prefix+"End")-num(prefix+"Start")-
+ (num(prefix+"Home")-num(prefix+"Invest"));
+ setText(type==="month"?"monthDeposit":"yearDeposit",money(deposit)+" টাকা");
+ return deposit;
 }
 
-/* মাসিক হিসাব */
-function monthValue(){
-return num("monthEnd")-num("monthStart")-num("monthHomeExpense")+num("monthInvest");
+["mEnd","mStart","mHome","mInvest"].forEach(id=>
+ document.getElementById(id).addEventListener("input",()=>periodCalculation("month"))
+);
+["yEnd","yStart","yHome","yInvest"].forEach(id=>
+ document.getElementById(id).addEventListener("input",()=>periodCalculation("year"))
+);
+
+function savePeriod(type){
+ let isMonth=type==="month";
+ let prefix=isMonth?"m":"y";
+ let date=document.getElementById(isMonth?"monthDate":"yearDate").value;
+ if(!date)return alert("সময় নির্বাচন করুন");
+
+ let record={
+  date,
+  sale:num(prefix+"Sale"),
+  purchase:num(prefix+"Purchase"),
+  shopCost:num(prefix+"ShopCost"),
+  end:num(prefix+"End"),
+  start:num(prefix+"Start"),
+  home:num(prefix+"Home"),
+  invest:num(prefix+"Invest"),
+  deposit:periodCalculation(type)
+ };
+ let arr=isMonth?data.monthlyAccounts:data.yearlyAccounts;
+ let i=arr.findIndex(x=>x.date===date);
+ if(i>=0)arr[i]=record;
+ else arr.push(record);
+ persist();
+ renderAccounts();
+ alert((isMonth?"মাসিক":"বার্ষিক")+" হিসাব সংরক্ষণ হয়েছে");
 }
 
-function updateMonth(){
-document.getElementById("monthDeposit").innerText=money(monthValue());
+function renderAccounts(){
+ let configs=[
+  ["dailyRows",data.dailyAccounts,r=>[
+   r.date,money(r.sale),money(r.end)
+  ]],
+  ["monthRows",data.monthlyAccounts,r=>[
+   r.date,money(r.sale),money(r.deposit)
+  ]],
+  ["yearRows",data.yearlyAccounts,r=>[
+   r.date,money(r.sale),money(r.deposit)
+  ]]
+ ];
+ configs.forEach(([id,arr,get])=>{
+  let tbody=document.getElementById(id);
+  tbody.innerHTML="";
+  [...arr].sort((a,b)=>b.date.localeCompare(a.date)).forEach(r=>{
+   let tr=document.createElement("tr");
+   get(r).forEach(v=>{
+    let td=document.createElement("td");
+    td.textContent=v;
+    tr.appendChild(td);
+   });
+   let td=document.createElement("td");
+   let btn=document.createElement("button");
+   btn.className="btn red";
+   btn.textContent="মুছুন";
+   btn.onclick=()=>{
+    if(confirm("এই হিসাব মুছে ফেলবেন?")){
+     let index=arr.findIndex(x=>x.date===r.date);
+     if(index>=0)arr.splice(index,1);
+     persist();renderAccounts();
+    }
+   };
+   td.appendChild(btn);tr.appendChild(td);tbody.appendChild(tr);
+  });
+ });
 }
 
-function saveMonth(){
-let date=document.getElementById("monthDate").value;
-if(!date){alert("মাস নির্বাচন করুন");return;}
-let obj={
-date,end:num("monthEnd"),start:num("monthStart"),
-sales:num("monthSales"),purchase:num("monthPurchase"),
-shopExpense:num("monthShopExpense"),homeExpense:num("monthHomeExpense"),
-invest:num("monthInvest"),deposit:monthValue()
-};
-let i=data.monthlyAccounts.findIndex(x=>x.date===date);
-if(i>=0)data.monthlyAccounts[i]=obj;
-else data.monthlyAccounts.push(obj);
-saveData();
-alert("মাসিক হিসাব সংরক্ষণ হয়েছে");
+// তারিখ সেট করা
+function initializeDates(){
+ let now=new Date();
+ let localDate=new Date(now.getTime()-now.getTimezoneOffset()*60000)
+ .toISOString().slice(0,10);
+ set("dailyDate",localDate);
+ set("monthDate",localDate.slice(0,7));
+ set("yearDate",now.getFullYear());
 }
 
-function deleteMonth(date){
-if(!confirm("এই মাসের হিসাব মুছবেন?"))return;
-data.monthlyAccounts=data.monthlyAccounts.filter(x=>x.date!==date);
-saveData();
-}
-
-/* বার্ষিক হিসাব */
-function yearValue(){
-return num("yearEnd")-num("yearStart")-num("yearHomeExpense")+num("yearInvest");
-}
-
-function updateYear(){
-document.getElementById("yearDeposit").innerText=money(yearValue());
-}
-
-function saveYear(){
-let date=String(num("yearDate"));
-if(!date||date==="0"){alert("বছর লিখুন");return;}
-let obj={
-date,end:num("yearEnd"),start:num("yearStart"),
-sales:num("yearSales"),purchase:num("yearPurchase"),
-shopExpense:num("yearShopExpense"),homeExpense:num("yearHomeExpense"),
-invest:num("yearInvest"),deposit:yearValue()
-};
-let i=data.yearlyAccounts.findIndex(x=>x.date===date);
-if(i>=0)data.yearlyAccounts[i]=obj;
-else data.yearlyAccounts.push(obj);
-saveData();
-alert("বার্ষিক হিসাব সংরক্ষণ হয়েছে");
-}
-
-function deleteYear(date){
-if(!confirm("এই বছরের হিসাব মুছবেন?"))return;
-data.yearlyAccounts=data.yearlyAccounts.filter(x=>x.date!==date);
-saveData();
-}
-
-function renderDaily(){
-document.getElementById("dailyList").innerHTML=data.dailyAccounts.map(x=>`
-<tr><td>${esc(x.date)}</td><td>${money(x.end)}</td><td>${money(x.invest)}</td>
-<td>${money(x.purchase)}</td><td>${money(x.shopExpense)}</td><td>${money(x.homeExpense)}</td>
-<td>${money(x.previous)}</td><td>${money(x.sales)}</td>
-<td><button class="action danger" onclick="deleteDaily('${x.date}')">মুছুন</button></td></tr>`).join("");
-}
-
-function renderMonths(){
-document.getElementById("monthList").innerHTML=data.monthlyAccounts.map(x=>`
-<tr><td>${esc(x.date)}</td><td>${money(x.sales)}</td><td>${money(x.purchase)}</td>
-<td>${money(x.shopExpense)}</td><td>${money(x.end)}</td><td>${money(x.start)}</td>
-<td>${money(x.homeExpense)}</td><td>${money(x.invest)}</td><td>${money(x.deposit)}</td>
-<td><button class="action danger" onclick="deleteMonth('${x.date}')">মুছুন</button></td></tr>`).join("");
-}
-
-function renderYears(){
-document.getElementById("yearList").innerHTML=data.yearlyAccounts.map(x=>`
-<tr><td>${esc(x.date)}</td><td>${money(x.sales)}</td><td>${money(x.purchase)}</td>
-<td>${money(x.shopExpense)}</td><td>${money(x.end)}</td><td>${money(x.start)}</td>
-<td>${money(x.homeExpense)}</td><td>${money(x.invest)}</td><td>${money(x.deposit)}</td>
-<td><button class="action danger" onclick="deleteYear('${x.date}')">মুছুন</button></td></tr>`).join("");
-}
-
-function renderAll(){
-renderStock();
-renderDaily();
-renderMonths();
-renderYears();
-preview();
-updateDaily();
-updateMonth();
-updateYear();
-}
-
-loadData();
-let today=new Date();
-document.getElementById("dailyDate").value=
-today.getFullYear()+"-"+String(today.getMonth()+1).padStart(2,"0")+"-"+String(today.getDate()).padStart(2,"0");
-document.getElementById("monthDate").value=
-today.getFullYear()+"-"+String(today.getMonth()+1).padStart(2,"0");
-document.getElementById("yearDate").value=today.getFullYear();
-
-document.querySelectorAll("#accounts input").forEach(el=>{
-el.addEventListener("input",()=>{
-updateDaily();updateMonth();updateYear();
-});
-});
-document.querySelectorAll("#stock input").forEach(el=>{
-el.addEventListener("input",preview);
-});
-renderAll();
+renderCompanies();
+renderProducts();
+renderAccounts();
+initializeDates();
+calculatePrices();
+dailyCalculation();
+periodCalculation("month");
+periodCalculation("year");
 </script>
 </body>
 </html>
