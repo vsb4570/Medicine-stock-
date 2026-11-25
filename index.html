@@ -743,8 +743,10 @@ function clearManualPeriod(){
 }
 
 // ম্যানুয়াল মাসিক হিসাব সংরক্ষণ
+
 function saveManualPeriod(){
-  const date=val("manualDate");
+  const date=val("manualMonth");
+
   if(!date){
     alert("মাস নির্বাচন করুন");
     return;
@@ -752,7 +754,7 @@ function saveManualPeriod(){
 
   const record={
     id:val("manualId")||uid(),
-    date,
+    date:date,
     sale:num("manualSale"),
     purchase:num("manualPurchase"),
     shopCost:num("manualShopCost"),
@@ -763,20 +765,29 @@ function saveManualPeriod(){
     autoDaily:false
   };
 
-  if(!data.manualPeriods)data.manualPeriods=[];
+  if(!Array.isArray(data.manualPeriods)){
+    data.manualPeriods=[];
+  }
 
-  const index=data.manualPeriods.findIndex(p=>p.id===record.id);
-  if(index>=0)data.manualPeriods[index]=record;
-  else{
-    // একই মাসের আগের ম্যানুয়াল হিসাব বদলে যাবে
-    data.manualPeriods=data.manualPeriods.filter(p=>p.date!==date);
+  const index=data.manualPeriods.findIndex(
+    p=>String(p.id)===String(record.id)
+  );
+
+  if(index>=0){
+    data.manualPeriods[index]=record;
+  }else{
+    data.manualPeriods=data.manualPeriods.filter(
+      p=>p.date!==date
+    );
     data.manualPeriods.push(record);
   }
 
   saveData();
   clearManualPeriod();
   renderPeriods();
-  alert("মাসিক হিসাব সংরক্ষণ হয়েছে");
+  renderYearAutomatically();
+
+  alert("মাসিক হিসাব সংরক্ষণ হয়েছে");
 }
 
 // ম্যানুয়াল হিসাব এডিট
